@@ -30,18 +30,19 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include "arowpp.h"
+
 #include <iostream>
 #include <vector>
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
-#include "arowpp.h"
-#include "scoped_ptr.h"
 #include "error_handler.h"
-#include "timer.h"
-#include "util.h"
 #include "feature.h"
+#include "options.h"
+#include "scoped_ptr.h"
+#include "timer.h"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,32 +190,24 @@ int arowpp_result_get_mistake(arowpp_result_t* result) {
 int arow_learn(int argc, char** argv) {
   using namespace arowpp;
 
-  // TODO: refactoring
-  if (argc < 3) {
-    UsageTrainer();
-    return -1;
-  }
+  TrainingOptions opts;
+  int opt_index;
+  CHECK_DIE(ParseCommandLineOptions(argc, argv, &opts, &opt_index))
+      << "Cannot parse command line options";
 
-  int num_iter = 1;            // Number of iterations
-  double r = 0.1;              // hyperparameter
-  bool is_shuffled = false;        // Shuffle data?
+  CHECK_DIE(opt_index + 2 == argc) << "Error invalid argument.";
+  CHECK_DIE(opts.num_iter > 0) << "Error: number of iterations must be positive!";
+  CHECK_DIE(opts.r > 0.f) << "Error: r must be positive value";
 
   TinyTimer timer;
-  OptionParser parser(3);
-  parser.Parse(argc, argv, num_iter, r, is_shuffled);
-
-
-  CHECK_DIE(num_iter > 0) << "Error: number of iterations must be positive!";
-  CHECK_DIE(r > 0.f) << "Error: r must be positive value";
-
   scoped_ptr<arowpp::BinaryClassifier> classifier(arowpp::BinaryClassifier::instance());
-  classifier->set_num_iter(num_iter);
-  classifier->set_r(r);
-  classifier->set_shuffle(is_shuffled);
+  classifier->set_num_iter(opts.num_iter);
+  classifier->set_r(opts.r);
+  classifier->set_shuffle(opts.enable_shuffle);
 
-  CHECK_DIE(classifier->Train(argv[1])) << "Cannot train "
+  CHECK_DIE(classifier->Train(argv[opt_index])) << "Cannot train "
                                         << classifier->what();
-  CHECK_DIE(classifier->Save(argv[2])) << "Cannot save "
+  CHECK_DIE(classifier->Save(argv[opt_index + 1])) << "Cannot save "
                                        << classifier->what();
   std::printf("Done!\nTime: %.4f sec.\n", timer.GetElapsedTime());
   return 0;
@@ -224,7 +217,7 @@ int arow_test(int argc, char** argv) {
   using namespace arowpp;
 
   if (argc < 3) {
-    UsageClassifier();
+    std::cerr << "Usage: arow_test test_file model_file" << std::endl;
     return -1;
   }
 

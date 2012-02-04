@@ -6,6 +6,7 @@ libarowpp_la_SOURCES = \
 	libarowpp.cc \
 	model_reader.cc \
 	model_writer.cc \
+	options.cc \
 	result.cc \
 	tokenizer.cc
 
@@ -23,6 +24,7 @@ if HAVE_GTEST
 check_PROGRAMS = \
 	classifier_test \
 	feature_test \
+	model_reader_test \
 	result_test \
 	tokenizer_test
 
@@ -32,6 +34,7 @@ TESTHARNESS = testharness.cc
 TESTS = \
 	classifier_test \
 	feature_test \
+	model_reader_test \
 	result_test \
 	tokenizer_test
 
@@ -40,6 +43,9 @@ classifier_test_LDADD = $(GTEST_LDFLAGS) $(GTEST_LIBS) libarowpp.la
 
 feature_test_SOURCES = feature_test.cc $(TESTHARNESS)
 feature_test_LDADD = $(GTEST_LDFLAGS) $(GTEST_LIBS) libarowpp.la
+
+model_reader_test_SOURCES = model_reader_test.cc $(TESTHARNESS)
+model_reader_test_LDADD = $(GTEST_LDFLAGS) $(GTEST_LIBS) libarowpp.la
 
 result_test_SOURCES = result_test.cc $(TESTHARNESS)
 result_test_LDADD = $(GTEST_LDFLAGS) $(GTEST_LIBS) libarowpp.la

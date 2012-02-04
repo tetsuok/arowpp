@@ -36,11 +36,13 @@ build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = arow_learn$(EXEEXT) arow_test$(EXEEXT)
 @HAVE_GTEST_TRUE@check_PROGRAMS = classifier_test$(EXEEXT) \
-@HAVE_GTEST_TRUE@	feature_test$(EXEEXT) result_test$(EXEEXT) \
-@HAVE_GTEST_TRUE@	tokenizer_test$(EXEEXT)
+@HAVE_GTEST_TRUE@	feature_test$(EXEEXT) \
+@HAVE_GTEST_TRUE@	model_reader_test$(EXEEXT) \
+@HAVE_GTEST_TRUE@	result_test$(EXEEXT) tokenizer_test$(EXEEXT)
 @HAVE_GTEST_TRUE@TESTS = classifier_test$(EXEEXT) \
-@HAVE_GTEST_TRUE@	feature_test$(EXEEXT) result_test$(EXEEXT) \
-@HAVE_GTEST_TRUE@	tokenizer_test$(EXEEXT)
+@HAVE_GTEST_TRUE@	feature_test$(EXEEXT) \
+@HAVE_GTEST_TRUE@	model_reader_test$(EXEEXT) \
+@HAVE_GTEST_TRUE@	result_test$(EXEEXT) tokenizer_test$(EXEEXT)
 subdir = src
 DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -66,7 +68,8 @@ libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libarowpp_la_LIBADD =
 am_libarowpp_la_OBJECTS = classifier.lo feature.lo libarowpp.lo \
-	model_reader.lo model_writer.lo result.lo tokenizer.lo
+	model_reader.lo model_writer.lo options.lo result.lo \
+	tokenizer.lo
 libarowpp_la_OBJECTS = $(am_libarowpp_la_OBJECTS)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
@@ -90,6 +93,14 @@ am__feature_test_SOURCES_DIST = feature_test.cc testharness.cc
 feature_test_OBJECTS = $(am_feature_test_OBJECTS)
 @HAVE_GTEST_TRUE@feature_test_DEPENDENCIES = $(am__DEPENDENCIES_1) \
 @HAVE_GTEST_TRUE@	$(am__DEPENDENCIES_1) libarowpp.la
+am__model_reader_test_SOURCES_DIST = model_reader_test.cc \
+	testharness.cc
+@HAVE_GTEST_TRUE@am_model_reader_test_OBJECTS =  \
+@HAVE_GTEST_TRUE@	model_reader_test.$(OBJEXT) $(am__objects_1)
+model_reader_test_OBJECTS = $(am_model_reader_test_OBJECTS)
+@HAVE_GTEST_TRUE@model_reader_test_DEPENDENCIES =  \
+@HAVE_GTEST_TRUE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+@HAVE_GTEST_TRUE@	libarowpp.la
 am__result_test_SOURCES_DIST = result_test.cc testharness.cc
 @HAVE_GTEST_TRUE@am_result_test_OBJECTS = result_test.$(OBJEXT) \
 @HAVE_GTEST_TRUE@	$(am__objects_1)
@@ -116,11 +127,12 @@ CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(libarowpp_la_SOURCES) $(arow_learn_SOURCES) \
 	$(arow_test_SOURCES) $(classifier_test_SOURCES) \
-	$(feature_test_SOURCES) $(result_test_SOURCES) \
-	$(tokenizer_test_SOURCES)
+	$(feature_test_SOURCES) $(model_reader_test_SOURCES) \
+	$(result_test_SOURCES) $(tokenizer_test_SOURCES)
 DIST_SOURCES = $(libarowpp_la_SOURCES) $(arow_learn_SOURCES) \
 	$(arow_test_SOURCES) $(am__classifier_test_SOURCES_DIST) \
 	$(am__feature_test_SOURCES_DIST) \
+	$(am__model_reader_test_SOURCES_DIST) \
 	$(am__result_test_SOURCES_DIST) \
 	$(am__tokenizer_test_SOURCES_DIST)
 includeHEADERS_INSTALL = $(INSTALL_HEADER)
@@ -256,6 +268,7 @@ libarowpp_la_SOURCES = \
 	libarowpp.cc \
 	model_reader.cc \
 	model_writer.cc \
+	options.cc \
 	result.cc \
 	tokenizer.cc
 
@@ -271,6 +284,8 @@ arow_test_LDADD = libarowpp.la
 @HAVE_GTEST_TRUE@classifier_test_LDADD = $(GTEST_LDFLAGS) $(GTEST_LIBS) libarowpp.la
 @HAVE_GTEST_TRUE@feature_test_SOURCES = feature_test.cc $(TESTHARNESS)
 @HAVE_GTEST_TRUE@feature_test_LDADD = $(GTEST_LDFLAGS) $(GTEST_LIBS) libarowpp.la
+@HAVE_GTEST_TRUE@model_reader_test_SOURCES = model_reader_test.cc $(TESTHARNESS)
+@HAVE_GTEST_TRUE@model_reader_test_LDADD = $(GTEST_LDFLAGS) $(GTEST_LIBS) libarowpp.la
 @HAVE_GTEST_TRUE@result_test_SOURCES = result_test.cc $(TESTHARNESS)
 @HAVE_GTEST_TRUE@result_test_LDADD = $(GTEST_LDFLAGS) $(GTEST_LIBS) libarowpp.la
 @HAVE_GTEST_TRUE@tokenizer_test_SOURCES = tokenizer_test.cc $(TESTHARNESS)
@@ -384,6 +399,9 @@ classifier_test$(EXEEXT): $(classifier_test_OBJECTS) $(classifier_test_DEPENDENC
 feature_test$(EXEEXT): $(feature_test_OBJECTS) $(feature_test_DEPENDENCIES) 
 	@rm -f feature_test$(EXEEXT)
 	$(CXXLINK) $(feature_test_OBJECTS) $(feature_test_LDADD) $(LIBS)
+model_reader_test$(EXEEXT): $(model_reader_test_OBJECTS) $(model_reader_test_DEPENDENCIES) 
+	@rm -f model_reader_test$(EXEEXT)
+	$(CXXLINK) $(model_reader_test_OBJECTS) $(model_reader_test_LDADD) $(LIBS)
 result_test$(EXEEXT): $(result_test_OBJECTS) $(result_test_DEPENDENCIES) 
 	@rm -f result_test$(EXEEXT)
 	$(CXXLINK) $(result_test_OBJECTS) $(result_test_LDADD) $(LIBS)
@@ -405,7 +423,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/feature_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libarowpp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/model_reader.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/model_reader_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/model_writer.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/options.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/result.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/result_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testharness.Po@am__quote@

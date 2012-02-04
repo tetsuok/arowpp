@@ -15,6 +15,6 @@ TRAIN_FILE=train.dat
 TEST_FILE=test.dat
 MODEL=model
 
-$TRAINER $TRAIN_FILE $MODEL -r=2.6 && echo "" && \
+$TRAINER -r 2.6 $TRAIN_FILE $MODEL && echo "" && \
     $TESTER $TEST_FILE $MODEL && \
     rm $MODEL
