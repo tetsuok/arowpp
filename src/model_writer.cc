@@ -66,6 +66,7 @@ bool ModelWriter::Open(const char* filename, const Param* param) const {
   bofs.write(reinterpret_cast<const char *>(&param->num_feature), sizeof(param->num_feature));
   bofs.write(reinterpret_cast<const char *>(&param->num_example), sizeof(param->num_example));
   bofs.write(reinterpret_cast<const char *>(&param->num_update), sizeof(param->num_update));
+  bofs.write(reinterpret_cast<const char *>(&param->num_iter), sizeof(param->num_iter));
   bofs.write(reinterpret_cast<const char *>(&param->r), sizeof(param->r));
   bofs.write(reinterpret_cast<const char *>(&param->is_shuffled), sizeof(param->is_shuffled));
 

@@ -66,6 +66,7 @@ bool ModelReader::Open(const char* filename, Param* param) const {
   bifs.read(reinterpret_cast<char *>(&param->num_feature), sizeof(param->num_feature));
   bifs.read(reinterpret_cast<char *>(&param->num_example), sizeof(param->num_example));
   bifs.read(reinterpret_cast<char *>(&param->num_update), sizeof(param->num_update));
+  bifs.read(reinterpret_cast<char *>(&param->num_iter), sizeof(param->num_iter));
   bifs.read(reinterpret_cast<char *>(&param->r), sizeof(param->r));
   bifs.read(reinterpret_cast<char *>(&param->is_shuffled), sizeof(param->is_shuffled));
 
