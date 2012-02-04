@@ -30,9 +30,12 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <fstream>
 #include "feature.h"
+
+#include <fstream>
 #include "random.h"
+#include "tokenizer.h"
+#include "logging.h"
 
 namespace arowpp {
 
@@ -49,7 +52,11 @@ bool Features::Open(const char* filename) {
     short label = 0;                      // true label
     fv_t vec;
 
-    CHECK_FALSE(ParseLine(line.c_str(), vec, label)) << "line: " << line_num;
+    if (!Tokenizer::Tokenize(line.c_str(), &vec, &label, &maxid_)) {
+      LOG(ERROR) << "Invalid line: " << line_num;
+      return false;
+    }
+
     features_.push_back(std::make_pair(vec, label));
   }
 

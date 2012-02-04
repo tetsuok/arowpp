@@ -36,9 +36,11 @@ build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = arow_learn$(EXEEXT) arow_test$(EXEEXT)
 @HAVE_GTEST_TRUE@check_PROGRAMS = classifier_test$(EXEEXT) \
-@HAVE_GTEST_TRUE@	feature_test$(EXEEXT) result_test$(EXEEXT)
+@HAVE_GTEST_TRUE@	feature_test$(EXEEXT) result_test$(EXEEXT) \
+@HAVE_GTEST_TRUE@	tokenizer_test$(EXEEXT)
 @HAVE_GTEST_TRUE@TESTS = classifier_test$(EXEEXT) \
-@HAVE_GTEST_TRUE@	feature_test$(EXEEXT) result_test$(EXEEXT)
+@HAVE_GTEST_TRUE@	feature_test$(EXEEXT) result_test$(EXEEXT) \
+@HAVE_GTEST_TRUE@	tokenizer_test$(EXEEXT)
 subdir = src
 DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -64,7 +66,7 @@ libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libarowpp_la_LIBADD =
 am_libarowpp_la_OBJECTS = classifier.lo feature.lo libarowpp.lo \
-	result.lo
+	result.lo tokenizer.lo
 libarowpp_la_OBJECTS = $(am_libarowpp_la_OBJECTS)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
@@ -94,6 +96,12 @@ am__result_test_SOURCES_DIST = result_test.cc testharness.cc
 result_test_OBJECTS = $(am_result_test_OBJECTS)
 @HAVE_GTEST_TRUE@result_test_DEPENDENCIES = $(am__DEPENDENCIES_1) \
 @HAVE_GTEST_TRUE@	$(am__DEPENDENCIES_1) libarowpp.la
+am__tokenizer_test_SOURCES_DIST = tokenizer_test.cc testharness.cc
+@HAVE_GTEST_TRUE@am_tokenizer_test_OBJECTS = tokenizer_test.$(OBJEXT) \
+@HAVE_GTEST_TRUE@	$(am__objects_1)
+tokenizer_test_OBJECTS = $(am_tokenizer_test_OBJECTS)
+@HAVE_GTEST_TRUE@tokenizer_test_DEPENDENCIES = $(am__DEPENDENCIES_1) \
+@HAVE_GTEST_TRUE@	$(am__DEPENDENCIES_1) libarowpp.la
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -108,11 +116,13 @@ CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(libarowpp_la_SOURCES) $(arow_learn_SOURCES) \
 	$(arow_test_SOURCES) $(classifier_test_SOURCES) \
-	$(feature_test_SOURCES) $(result_test_SOURCES)
+	$(feature_test_SOURCES) $(result_test_SOURCES) \
+	$(tokenizer_test_SOURCES)
 DIST_SOURCES = $(libarowpp_la_SOURCES) $(arow_learn_SOURCES) \
 	$(arow_test_SOURCES) $(am__classifier_test_SOURCES_DIST) \
 	$(am__feature_test_SOURCES_DIST) \
-	$(am__result_test_SOURCES_DIST)
+	$(am__result_test_SOURCES_DIST) \
+	$(am__tokenizer_test_SOURCES_DIST)
 includeHEADERS_INSTALL = $(INSTALL_HEADER)
 HEADERS = $(include_HEADERS)
 ETAGS = etags
@@ -244,7 +254,8 @@ libarowpp_la_SOURCES = \
 	classifier.cc \
 	feature.cc \
 	libarowpp.cc \
-	result.cc
+	result.cc \
+	tokenizer.cc
 
 include_HEADERS = arowpp.h
 arow_learn_SOURCES = arow_learn.cc
@@ -260,6 +271,8 @@ arow_test_LDADD = libarowpp.la
 @HAVE_GTEST_TRUE@feature_test_LDADD = $(GTEST_LDFLAGS) $(GTEST_LIBS) libarowpp.la
 @HAVE_GTEST_TRUE@result_test_SOURCES = result_test.cc $(TESTHARNESS)
 @HAVE_GTEST_TRUE@result_test_LDADD = $(GTEST_LDFLAGS) $(GTEST_LIBS) libarowpp.la
+@HAVE_GTEST_TRUE@tokenizer_test_SOURCES = tokenizer_test.cc $(TESTHARNESS)
+@HAVE_GTEST_TRUE@tokenizer_test_LDADD = $(GTEST_LDFLAGS) $(GTEST_LIBS) libarowpp.la
 all: all-am
 
 .SUFFIXES:
@@ -372,6 +385,9 @@ feature_test$(EXEEXT): $(feature_test_OBJECTS) $(feature_test_DEPENDENCIES)
 result_test$(EXEEXT): $(result_test_OBJECTS) $(result_test_DEPENDENCIES) 
 	@rm -f result_test$(EXEEXT)
 	$(CXXLINK) $(result_test_OBJECTS) $(result_test_LDADD) $(LIBS)
+tokenizer_test$(EXEEXT): $(tokenizer_test_OBJECTS) $(tokenizer_test_DEPENDENCIES) 
+	@rm -f tokenizer_test$(EXEEXT)
+	$(CXXLINK) $(tokenizer_test_OBJECTS) $(tokenizer_test_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -389,6 +405,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/result.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/result_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testharness.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tokenizer.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tokenizer_test.Po@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

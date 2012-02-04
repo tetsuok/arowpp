@@ -16,5 +16,6 @@ src/arow_test
 src/classifier_test
 src/feature_test
 src/result_test
+src/tokenizer_test
 src/Makefile
 stamp-h1

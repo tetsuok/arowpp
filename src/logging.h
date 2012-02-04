@@ -1,4 +1,4 @@
-// Copyright (c) 2010-2012, Tetsuo Kiso
+// Copyright (c) 2012, Tetsuo Kiso
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -30,44 +30,59 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef AROWPP_FEATURE_H_
-#define AROWPP_FEATURE_H_
+#ifndef AROWPP_LOGGING_H_
+#define AROWPP_LOGGING_H_
 
-#include "common.h"
-#include <cstring>
-#include <ctype.h>
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
 
-namespace arowpp {
+namespace logging {
 
-//
-// TODO: refactor this class name.
-//
-class Features {
- public:
-  Features() : maxid_(0) {}
-  ~Features() {}
-
-  std::pair<fv_t, short>& get_instance(int i) { return features_[i]; }
-
-  std::size_t maxid() const { return maxid_; }
-
-  std::size_t size() const { return features_.size(); }
-
-  bool Open(const char* filename);
-
-  // Shuffle feature vectors
-  void Shuffle();
-
-  const char* what() { return what_.str(); }
-
- private:
-  Features(const Features&);
-  const Features& operator=(const Features&);
-
-  std::size_t maxid_;                   // Maximum feature id
-  std::vector<std::pair<fv_t, short> > features_;
-  whatlog what_;
+enum LogLevel {
+  LOG_INFO = 0,
+  LOG_WARNING = 1,
+  LOG_ERROR = 2,
+  LOG_FATAL = 3
 };
 
-} // namespace arowpp
-#endif  // AROWPP_FEATURE_H_
+class Logger {
+ public:
+  static std::ostream &GetLogStream() {
+    return std::cerr;
+  }
+
+ private:
+  Logger() {}
+  virtual ~Logger() {}
+};
+
+class LogFinalizer {
+ public:
+  explicit LogFinalizer(LogLevel level) : level_(level) {}
+  ~LogFinalizer() {
+    Logger::GetLogStream() << std::endl;
+    if (level_ == LOG_FATAL) {
+      std::exit(-1);
+    }
+  }
+
+  // To ignore values used in when defining logging macros.
+  void operator&(std::ostream&) {}
+
+ private:
+  LogLevel level_;
+};
+} // namespace logging
+
+#define CHECK_AND_DIE(condition) \
+  (condition) ? (void) 0 : logging::LogFinalizer(logging::LOG_FATAL) & \
+  logging::Logger::GetLogStream() << "Die: " << \
+  __FILE__ << "(" << __LINE__ << ") [" << #condition << "] "
+
+#define LOG(loglevel) \
+  logging::LogFinalizer(logging::LOG_##loglevel) & \
+  logging::Logger::GetLogStream() \
+  << "LOG(" <<  #loglevel << "): " << __FILE__ << "(" << __LINE__ << ") "
+
+#endif  // AROWPP_LOGGING_H_

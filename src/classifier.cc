@@ -35,6 +35,7 @@
 #include "common.h"
 #include "feature.h"
 #include "scoped_ptr.h"
+#include "tokenizer.h"
 
 namespace arowpp {
 
@@ -62,8 +63,9 @@ class BinaryClassifierImpl : public BinaryClassifier {
   virtual bool Classify(const char* line, Result* result) {
     short label = 0;                      // true label
     fv_t fv;
-
-    CHECK_FALSE(Features::Parse(line, fv, label)) << "cannot classify ";
+    size_t dummy = 0;                     // dummy id
+    CHECK_FALSE(Tokenizer::Tokenize(line, &fv, &label, &dummy))
+        << "cannot classify ";
     CHECK_FALSE(result->Add(label, Predict(fv)));
 
     return true;

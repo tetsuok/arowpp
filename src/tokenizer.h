@@ -1,4 +1,4 @@
-// Copyright (c) 2010-2012, Tetsuo Kiso
+// Copyright (c) 2012, Tetsuo Kiso
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -30,44 +30,23 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef AROWPP_FEATURE_H_
-#define AROWPP_FEATURE_H_
+#ifndef AROWPP_TOKENIZER_H_
+#define AROWPP_TOKENIZER_H_
 
 #include "common.h"
-#include <cstring>
-#include <ctype.h>
 
 namespace arowpp {
 
-//
-// TODO: refactor this class name.
-//
-class Features {
+class Tokenizer {
  public:
-  Features() : maxid_(0) {}
-  ~Features() {}
-
-  std::pair<fv_t, short>& get_instance(int i) { return features_[i]; }
-
-  std::size_t maxid() const { return maxid_; }
-
-  std::size_t size() const { return features_.size(); }
-
-  bool Open(const char* filename);
-
-  // Shuffle feature vectors
-  void Shuffle();
-
-  const char* what() { return what_.str(); }
+  static bool Tokenize(const char* line, fv_t* fv, short* y,
+                       std::size_t* maxid);
 
  private:
-  Features(const Features&);
-  const Features& operator=(const Features&);
-
-  std::size_t maxid_;                   // Maximum feature id
-  std::vector<std::pair<fv_t, short> > features_;
-  whatlog what_;
+  Tokenizer() {}
+  virtual ~Tokenizer() {}
 };
 
 } // namespace arowpp
-#endif  // AROWPP_FEATURE_H_
+
+#endif  // AROWPP_TOKENIZER_H_
