@@ -34,13 +34,12 @@
 #include "scoped_ptr.h"
 #include <gtest/gtest.h>
 
+namespace arowpp {
 namespace {
 
 const char kTrainFile[] = "../sample/train.dat";
 
 } // namespace
-
-namespace arowpp {
 
 class BinaryClassifierTest : public testing::Test {
  protected:
