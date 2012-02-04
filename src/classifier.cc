@@ -36,6 +36,7 @@
 #include "feature.h"
 #include "scoped_ptr.h"
 #include "tokenizer.h"
+#include "param.h"
 
 namespace arowpp {
 
@@ -45,13 +46,8 @@ class Result;
 class BinaryClassifierImpl : public BinaryClassifier {
  public:
   BinaryClassifierImpl()
-      : num_iter_(0),
-        num_feature_(0),
-        num_example_(0),
-        num_update_(0),
-        r_(0.1),
-        is_shuffled_(false),
-        features_(NULL) {}
+      : param_(new Param),
+        features_(new Features) {}
 
   virtual ~BinaryClassifierImpl() {}
 
@@ -61,17 +57,23 @@ class BinaryClassifierImpl : public BinaryClassifier {
   virtual bool Load(const char* filename);
   virtual bool Classify(const char* line, Result* result);
 
-  virtual int get_num_iter() const { return num_iter_; }
-  virtual unsigned int get_num_feature() const { return num_feature_; }
-  virtual size_t get_num_example() const { return num_example_; }
-  virtual size_t get_num_update() const { return num_update_; }
-  virtual double get_r() const { return r_; }
-  virtual bool is_shuffled() const { return is_shuffled_; }
+  virtual int get_num_iter() const { return param_->num_iter; }
+  virtual unsigned int get_num_feature() const { return param_->num_feature; }
+  virtual size_t get_num_example() const { return param_->num_example; }
+  virtual size_t get_num_update() const { return param_->num_update; }
+  virtual double get_r() const { return param_->r; }
+  virtual bool is_shuffled() const { return param_->is_shuffled; }
 
-  virtual void set_num_feature(unsigned int num_feature) { num_feature_ = num_feature; }
-  virtual void set_num_iter(int num_iter) { num_iter_ = num_iter; }
-  virtual void set_r(double r) { r_ = r; }
-  virtual void set_shuffle(bool flag) { is_shuffled_ = flag; }
+  virtual void set_num_feature(unsigned int num_feature) {
+    param_->num_feature = num_feature;
+  }
+
+  virtual void set_num_iter(int num_iter) {
+    param_->num_iter = num_iter;
+  }
+
+  virtual void set_r(double r) { param_->r = r; }
+  virtual void set_shuffle(bool flag) { param_->is_shuffled = flag; }
 
   virtual const char* what() { return what_.str(); }
 
@@ -90,7 +92,7 @@ class BinaryClassifierImpl : public BinaryClassifier {
   double GetMargin(const fv_t& fv) const {
     double res = 0.0;
     for (fv_t::const_iterator it = fv.begin(); it != fv.end(); ++it) {
-      res += mean_[it->first] * it->second;
+      res += param_->mean[it->first] * it->second;
     }
     return res;
   }
@@ -98,7 +100,7 @@ class BinaryClassifierImpl : public BinaryClassifier {
   double GetConfidence(const fv_t& fv) const {
     double res = 0.0;
     for (fv_t::const_iterator it = fv.begin(); it != fv.end(); ++it) {
-      res += cov_[it->first] * it->second * it->second;
+      res += param_->cov[it->first] * it->second * it->second;
     }
     return res;
   }
@@ -106,33 +108,23 @@ class BinaryClassifierImpl : public BinaryClassifier {
   // Resizes mean and covariance parameters.
   void ResizeWeight(const fv_t &fv);
 
-  // Allocates mean vector and covariance matrix.
-  void Allocate();
-
   // We disable the default assignment operator and copy constructor.
   BinaryClassifierImpl(const BinaryClassifierImpl&);
   const BinaryClassifierImpl& operator=(const BinaryClassifierImpl&);
 
-  int num_iter_;                        // Number of iteration
-  unsigned int num_feature_;            // Number of features
-  std::size_t num_example_;             // Number of examples
-  std::size_t num_update_; // Number of update of the confidence parameters
-  double r_;                            // hyperparameter
-  bool is_shuffled_;                    // flag judgement
+  scoped_ptr<Param> param_;
   scoped_ptr<Features> features_;       // Feature vector
-  std::vector<float> mean_;            // mean parameters
-  std::vector<float> cov_; // covariance matrix with diagonal elements
   whatlog what_;                        // store error log
 };
 
 bool BinaryClassifierImpl::Train(const char *filename) {
   CHECK_FALSE(Open(filename)) << "Cannot read " << filename;
 
-  if (is_shuffled_) {
+  if (is_shuffled()) {
     features_->Shuffle();
   }
 
-  for (int i = 0; i < num_iter_; ++i) {
+  for (int i = 0; i < get_num_iter(); ++i) {
     for (Features::const_iterator it = features_->begin();
          it != features_->end(); ++it) {
       Update(it->first, it->second);
@@ -142,11 +134,10 @@ bool BinaryClassifierImpl::Train(const char *filename) {
 }
 
 bool BinaryClassifierImpl::Open(const char *filename) {
-  features_.reset(new Features);
   CHECK_FALSE(features_->Open(filename)) << "no such file or directory: "
                                          << filename;
-  num_feature_ = features_->maxid();
-  Allocate();
+  set_num_feature(features_->maxid());
+  param_->Reset();
   return true;
 }
 
@@ -155,26 +146,26 @@ bool BinaryClassifierImpl::Save(const char *filename) {
   bofs.open(filename, std::ios::out | std::ios::binary);
   CHECK_FALSE(bofs) << "no such file or directory: " << filename;
 
-  bofs.write(reinterpret_cast<char *>(&num_feature_), sizeof(num_feature_));
-  bofs.write(reinterpret_cast<char *>(&num_example_), sizeof(num_example_));
-  bofs.write(reinterpret_cast<char *>(&num_update_), sizeof(num_update_));
-  bofs.write(reinterpret_cast<char *>(&r_), sizeof(r_));
-  bofs.write(reinterpret_cast<char *>(&is_shuffled_), sizeof(is_shuffled_));
+  bofs.write(reinterpret_cast<char *>(&param_->num_feature), sizeof(param_->num_feature));
+  bofs.write(reinterpret_cast<char *>(&param_->num_example), sizeof(param_->num_example));
+  bofs.write(reinterpret_cast<char *>(&param_->num_update), sizeof(param_->num_update));
+  bofs.write(reinterpret_cast<char *>(&param_->r), sizeof(param_->r));
+  bofs.write(reinterpret_cast<char *>(&param_->is_shuffled), sizeof(param_->is_shuffled));
 
   // mean
-  bofs.write(reinterpret_cast<char *>(&mean_[0]), mean_.size() * sizeof(float));
+  bofs.write(reinterpret_cast<char *>(&param_->mean[0]), param_->mean.size() * sizeof(float));
 
   // covariance
-  bofs.write(reinterpret_cast<char *>(&cov_[0]), cov_.size() * sizeof(float));
+  bofs.write(reinterpret_cast<char *>(&param_->cov[0]), param_->cov.size() * sizeof(float));
 
   bofs.close();
 
-  CHECK_FALSE(num_example_ != 0) << "Could not train examples";
+  CHECK_FALSE(param_->num_example != 0) << "Could not train examples";
 
-  std::cout << "Number of features: " << num_feature_ << "\n"
+  std::cout << "Number of features: " << param_->num_feature << "\n"
             << "Number of examples: "
-            << static_cast<double>(num_example_) / num_iter_ << "\n"
-            << "Number of updates:  " << num_update_ << std::endl;
+            << static_cast<double>(param_->num_example) / param_->num_iter << "\n"
+            << "Number of updates:  " << param_->num_update << std::endl;
 
   return true;
 }
@@ -184,29 +175,17 @@ bool BinaryClassifierImpl::Load(const char *filename) {
   CHECK_FALSE(bifs) << "Cannot load: no such file or directory: " << filename;
 
   // Get number of feature, number of examples and number of update
-  bifs.read(reinterpret_cast<char *>(&num_feature_), sizeof(num_feature_));
-  bifs.read(reinterpret_cast<char *>(&num_example_), sizeof(num_example_));
-  bifs.read(reinterpret_cast<char *>(&num_update_), sizeof(num_update_));
-  bifs.read(reinterpret_cast<char *>(&r_), sizeof(r_));
-  bifs.read(reinterpret_cast<char *>(&is_shuffled_), sizeof(is_shuffled_));
-
-  bool flag = true;
-  if      (!num_feature_) { flag = false; }
-  else if (!num_example_) { flag = false; }
-  else if (!num_update_)  { flag = false; }
-  else if (!r_)           { flag = false; }
-
-  if (!flag) {
-    std::cerr << "Error: load parameter" << std::endl;
-    bifs.close();
-    return false;
-  }
+  bifs.read(reinterpret_cast<char *>(&param_->num_feature), sizeof(param_->num_feature));
+  bifs.read(reinterpret_cast<char *>(&param_->num_example), sizeof(param_->num_example));
+  bifs.read(reinterpret_cast<char *>(&param_->num_update), sizeof(param_->num_update));
+  bifs.read(reinterpret_cast<char *>(&param_->r), sizeof(param_->r));
+  bifs.read(reinterpret_cast<char *>(&param_->is_shuffled), sizeof(param_->is_shuffled));
 
   // Initialize
-  Allocate();
+  param_->Reset();
 
-  bifs.read(reinterpret_cast<char *>(&mean_[0]), mean_.size() * sizeof(float));
-  bifs.read(reinterpret_cast<char *>(&cov_[0]), cov_.size() * sizeof(float));
+  bifs.read(reinterpret_cast<char *>(&param_->mean[0]), param_->mean.size() * sizeof(float));
+  bifs.read(reinterpret_cast<char *>(&param_->cov[0]), param_->cov.size() * sizeof(float));
 
   bifs.close();
 
@@ -225,15 +204,14 @@ inline bool BinaryClassifierImpl::Classify(const char* line, Result* result) {
 }
 
 void BinaryClassifierImpl::Update(const fv_t &fv, short label) {
-  ++num_example_;
+  ++param_->num_example;
   const double m = GetMargin(fv);
-  // const int loss = SufferLoss(m, label);
 
   if (m * label < 1.0) {
-    ++num_update_;
+    ++param_->num_update;
 
     const double conf = GetConfidence(fv);
-    const double beta = 1.0 / (conf + r_);
+    const double beta = 1.0 / (conf + param_->r);
     const double alpha = (1.0 - label * m) * beta;
 
     ResizeWeight(fv);
@@ -242,8 +220,8 @@ void BinaryClassifierImpl::Update(const fv_t &fv, short label) {
     for (fv_t::const_iterator it = fv.begin(); it != fv.end(); ++it) {
       const unsigned int id = it->first;
       const float val = it->second;
-      mean_[id] += alpha * label * cov_[id] * val;
-      cov_[id] = 1.f / ((1.f / cov_[id]) + val * val / r_);
+      param_->mean[id] += alpha * label * param_->cov[id] * val;
+      param_->cov[id] = 1.f / ((1.f / param_->cov[id]) + val * val / param_->r);
     }
   }
 }
@@ -251,23 +229,16 @@ void BinaryClassifierImpl::Update(const fv_t &fv, short label) {
 void BinaryClassifierImpl::ResizeWeight(const fv_t &fv) {
   for (std::size_t i = 0; i < fv.size(); ++i) {
     const std::size_t id = fv[i].first;
-    if (cov_.size() > id) continue;
-    const std::size_t prev_size = cov_.size();
+    if (param_->cov.size() > id) continue;
+    const std::size_t prev_size = param_->cov.size();
 
-    mean_.resize(id + 1);
-    cov_.resize(id + 1);
-    for (std::size_t j = prev_size; j < cov_.size(); ++j) {
-      mean_[j] = 0.f;
-      cov_[j] = 1.f;
+    param_->mean.resize(id + 1);
+    param_->cov.resize(id + 1);
+    for (std::size_t j = prev_size; j < param_->cov.size(); ++j) {
+      param_->mean[j] = 0.f;
+      param_->cov[j] = 1.f;
     }
   }
-}
-
-void BinaryClassifierImpl::Allocate() {
-  mean_.reserve(num_feature_ + 1);
-  mean_.assign(num_feature_ + 1, 0.f);
-  cov_.reserve(num_feature_ + 1);
-  cov_.assign(num_feature_ + 1, 1.f);
 }
 
 // Get instance
