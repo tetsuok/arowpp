@@ -66,7 +66,7 @@ libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libarowpp_la_LIBADD =
 am_libarowpp_la_OBJECTS = classifier.lo feature.lo libarowpp.lo \
-	result.lo tokenizer.lo
+	model_reader.lo model_writer.lo result.lo tokenizer.lo
 libarowpp_la_OBJECTS = $(am_libarowpp_la_OBJECTS)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
@@ -254,6 +254,8 @@ libarowpp_la_SOURCES = \
 	classifier.cc \
 	feature.cc \
 	libarowpp.cc \
+	model_reader.cc \
+	model_writer.cc \
 	result.cc \
 	tokenizer.cc
 
@@ -402,6 +404,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/feature.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/feature_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libarowpp.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/model_reader.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/model_writer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/result.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/result_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testharness.Po@am__quote@

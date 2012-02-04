@@ -30,56 +30,32 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef AROWPP_PARAM_H_
-#define AROWPP_PARAM_H_
-
-#include <cstdlib>
-#include <vector>
+#ifndef MODEL_WRITER_INTERFACE_H_
+#define MODEL_WRITER_INTERFACE_H_
 
 namespace arowpp {
 
-// Model parameters
-struct Param {
-  // Number of features
-  unsigned int num_feature;
+struct Param;
 
-  // Number of training examples
-  std::size_t num_example;
+class ModelWriterInterface {
+ public:
+  virtual ~ModelWriterInterface() {}
+  virtual bool Open(const char* filename, const Param* param) const = 0;
 
-  // Number of updates.
-  std::size_t num_update;
+ protected:
+  ModelWriterInterface() {}
+};
 
-  // Number of iteration
-  int num_iter;
+class ModelWriterFactory {
+ public:
+  static ModelWriterInterface* GetModelWriter();
+  static void SetModelWriter(ModelWriterInterface* writer);
 
-  // hyperparameter
-  double r;
-
-  // Flag for shuffling training examples.
-  bool is_shuffled;
-
-  // mean parameters
-  std::vector<float> mean;
-
-  // covariance matrix with diagonal elements
-  std::vector<float> cov;
-
-  Param()
-      : num_feature(0),
-        num_example(0),
-        num_update(0),
-        num_iter(0),
-        r(0.1),
-        is_shuffled(false) {}
-
-  void Reset() {
-    mean.reserve(num_feature + 1);
-    mean.assign(num_feature + 1, 0.f);
-    cov.reserve(num_feature + 1);
-    cov.assign(num_feature + 1, 1.f);
-  }
+ private:
+  ModelWriterFactory();
+  ~ModelWriterFactory();
 };
 
 } // namespace arowpp
 
-#endif  // AROWPP_PARAM_H_
+#endif  // MODEL_WRITER_INTERFACE_H_

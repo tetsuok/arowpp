@@ -37,6 +37,8 @@
 #include "scoped_ptr.h"
 #include "tokenizer.h"
 #include "param.h"
+#include "model_reader_interface.h"
+#include "model_writer_interface.h"
 
 namespace arowpp {
 
@@ -142,25 +144,13 @@ bool BinaryClassifierImpl::Open(const char *filename) {
 }
 
 bool BinaryClassifierImpl::Save(const char *filename) {
-  std::ofstream bofs;
-  bofs.open(filename, std::ios::out | std::ios::binary);
-  CHECK_FALSE(bofs) << "no such file or directory: " << filename;
-
-  bofs.write(reinterpret_cast<char *>(&param_->num_feature), sizeof(param_->num_feature));
-  bofs.write(reinterpret_cast<char *>(&param_->num_example), sizeof(param_->num_example));
-  bofs.write(reinterpret_cast<char *>(&param_->num_update), sizeof(param_->num_update));
-  bofs.write(reinterpret_cast<char *>(&param_->r), sizeof(param_->r));
-  bofs.write(reinterpret_cast<char *>(&param_->is_shuffled), sizeof(param_->is_shuffled));
-
-  // mean
-  bofs.write(reinterpret_cast<char *>(&param_->mean[0]), param_->mean.size() * sizeof(float));
-
-  // covariance
-  bofs.write(reinterpret_cast<char *>(&param_->cov[0]), param_->cov.size() * sizeof(float));
-
-  bofs.close();
-
   CHECK_FALSE(param_->num_example != 0) << "Could not train examples";
+
+  scoped_ptr<ModelWriterInterface> writer(
+      ModelWriterFactory::GetModelWriter());
+
+  CHECK_FALSE(writer->Open(filename, param_.get()))
+      << "Failed to save model " << filename;
 
   std::cout << "Number of features: " << param_->num_feature << "\n"
             << "Number of examples: "
@@ -171,24 +161,12 @@ bool BinaryClassifierImpl::Save(const char *filename) {
 }
 
 bool BinaryClassifierImpl::Load(const char *filename) {
-  std::ifstream bifs(filename, std::ios::in | std::ios::binary);
-  CHECK_FALSE(bifs) << "Cannot load: no such file or directory: " << filename;
-
-  // Get number of feature, number of examples and number of update
-  bifs.read(reinterpret_cast<char *>(&param_->num_feature), sizeof(param_->num_feature));
-  bifs.read(reinterpret_cast<char *>(&param_->num_example), sizeof(param_->num_example));
-  bifs.read(reinterpret_cast<char *>(&param_->num_update), sizeof(param_->num_update));
-  bifs.read(reinterpret_cast<char *>(&param_->r), sizeof(param_->r));
-  bifs.read(reinterpret_cast<char *>(&param_->is_shuffled), sizeof(param_->is_shuffled));
-
-  // Initialize
-  param_->Reset();
-
-  bifs.read(reinterpret_cast<char *>(&param_->mean[0]), param_->mean.size() * sizeof(float));
-  bifs.read(reinterpret_cast<char *>(&param_->cov[0]), param_->cov.size() * sizeof(float));
-
-  bifs.close();
-
+  scoped_ptr<ModelReaderInterface> reader(
+      ModelReaderFactory::GetModelReader());
+  Param* param = new Param;
+  CHECK_FALSE(reader->Open(filename, param))
+      << "Failed to load model " << filename;
+  param_.reset(param);
   return true;
 }
 

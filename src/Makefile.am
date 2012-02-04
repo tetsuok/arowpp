@@ -4,6 +4,8 @@ libarowpp_la_SOURCES = \
 	classifier.cc \
 	feature.cc \
 	libarowpp.cc \
+	model_reader.cc \
+	model_writer.cc \
 	result.cc \
 	tokenizer.cc
 
