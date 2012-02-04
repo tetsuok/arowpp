@@ -44,10 +44,16 @@ namespace arowpp {
 //
 class Features {
  public:
+  typedef std::vector<std::pair<fv_t, short> >::iterator iterator;
+  typedef std::vector<std::pair<fv_t, short> >::const_iterator const_iterator;
+
   Features() : maxid_(0) {}
   ~Features() {}
 
-  std::pair<fv_t, short>& get_instance(int i) { return features_[i]; }
+  iterator begin() { return features_.begin(); }
+  const_iterator begin() const { return features_.begin(); }
+  iterator end() { return features_.end(); }
+  const_iterator end() const { return features_.end(); }
 
   std::size_t maxid() const { return maxid_; }
 
@@ -58,15 +64,13 @@ class Features {
   // Shuffle feature vectors
   void Shuffle();
 
-  const char* what() { return what_.str(); }
-
  private:
+  // no copying allowed.
   Features(const Features&);
   const Features& operator=(const Features&);
 
   std::size_t maxid_;                   // Maximum feature id
   std::vector<std::pair<fv_t, short> > features_;
-  whatlog what_;
 };
 
 } // namespace arowpp

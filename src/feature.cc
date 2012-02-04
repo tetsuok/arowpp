@@ -41,7 +41,10 @@ namespace arowpp {
 
 bool Features::Open(const char* filename) {
   std::ifstream ifs(filename);
-  CHECK_FALSE(ifs) << "no such file or directory" << filename;
+  if (!ifs) {
+    LOG(ERROR) << "no such file or directory " << filename;
+    return false;
+  }
 
   std::size_t line_num = 0;
   std::string line;
@@ -56,10 +59,8 @@ bool Features::Open(const char* filename) {
       LOG(ERROR) << "Invalid line: " << line_num;
       return false;
     }
-
     features_.push_back(std::make_pair(vec, label));
   }
-
   return true;
 }
 

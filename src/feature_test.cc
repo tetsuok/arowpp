@@ -56,10 +56,10 @@ TEST_F(FeaturesTest, OpenTest) {
   EXPECT_TRUE(features_->maxid() > 0);
   EXPECT_TRUE(features_->size() > 0);
 
-  // Verification labels
-  for (std::size_t i = 0; i < features_->size(); ++i) {
-    std::pair<fv_t, short>& x = features_->get_instance(i);
-    EXPECT_TRUE(x.second == 1 || x.second == -1);
+  // Verify labels
+  for (Features::const_iterator it = features_->begin();
+       it != features_->end(); ++it) {
+    EXPECT_TRUE(it->second == 1 || it->second == -1);
   }
 }
 

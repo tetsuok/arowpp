@@ -87,34 +87,34 @@ class BinaryClassifierImpl : public BinaryClassifier {
 
  private:
   // Updates mean and confindence parameters.
-  void Update(fv_t &fv, short label);
+  void Update(const fv_t &fv, short label);
 
   // Makes a prediction from sign of margin.
   // Returns the predicted label.
-  int Predict(fv_t &fv) {
+  int Predict(const fv_t &fv) {
     ResizeWeight(fv);
     const double m = GetMargin(fv);
     return m > 0.0 ? 1 : -1;
   }
 
-  double GetMargin(fv_t &fv) const {
+  double GetMargin(const fv_t& fv) const {
     double res = 0.0;
-    for (fv_t::iterator it = fv.begin(); it != fv.end(); ++it) {
+    for (fv_t::const_iterator it = fv.begin(); it != fv.end(); ++it) {
       res += mean_[it->first] * it->second;
     }
     return res;
   }
 
-  double GetConfidence(fv_t &fv) const {
+  double GetConfidence(const fv_t& fv) const {
     double res = 0.0;
-    for (fv_t::iterator it = fv.begin(); it != fv.end(); ++it) {
+    for (fv_t::const_iterator it = fv.begin(); it != fv.end(); ++it) {
       res += cov_[it->first] * it->second * it->second;
     }
     return res;
   }
 
   // Resizes mean and covariance parameters.
-  void ResizeWeight(fv_t &fv);
+  void ResizeWeight(const fv_t &fv);
 
   // Allocates mean vector and covariance matrix.
   void Allocate();
@@ -143,9 +143,9 @@ bool BinaryClassifierImpl::Train(const char *filename) {
   }
 
   for (int i = 0; i < num_iter_; ++i) {
-    for (std::size_t j = 0; j < features_->size(); ++j) {
-      std::pair<fv_t, short> instance = features_->get_instance(j);
-      Update(instance.first, instance.second);
+    for (Features::const_iterator it = features_->begin();
+         it != features_->end(); ++it) {
+      Update(it->first, it->second);
     }
   }
   return true;
@@ -154,8 +154,7 @@ bool BinaryClassifierImpl::Train(const char *filename) {
 bool BinaryClassifierImpl::Open(const char *filename) {
   features_.reset(new Features);
   CHECK_FALSE(features_->Open(filename)) << "no such file or directory: "
-                                         << filename << " "
-                                         << features_->what();
+                                         << filename;
   num_feature_ = features_->maxid();
   Allocate();
   return true;
@@ -224,7 +223,7 @@ bool BinaryClassifierImpl::Load(const char *filename) {
   return true;
 }
 
-void BinaryClassifierImpl::Update(fv_t &fv, short label) {
+void BinaryClassifierImpl::Update(const fv_t &fv, short label) {
   ++num_example_;
   const double m = GetMargin(fv);
   // const int loss = SufferLoss(m, label);
@@ -239,7 +238,7 @@ void BinaryClassifierImpl::Update(fv_t &fv, short label) {
     ResizeWeight(fv);
 
     // Update mean and covariance
-    for (fv_t::iterator it = fv.begin(); it != fv.end(); ++it) {
+    for (fv_t::const_iterator it = fv.begin(); it != fv.end(); ++it) {
       const unsigned int id = it->first;
       const float val = it->second;
       mean_[id] += alpha * label * cov_[id] * val;
@@ -248,7 +247,7 @@ void BinaryClassifierImpl::Update(fv_t &fv, short label) {
   }
 }
 
-void BinaryClassifierImpl::ResizeWeight(fv_t &fv) {
+void BinaryClassifierImpl::ResizeWeight(const fv_t &fv) {
   for (std::size_t i = 0; i < fv.size(); ++i) {
     const std::size_t id = fv[i].first;
     if (cov_.size() > id) continue;
