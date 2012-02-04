@@ -9,7 +9,6 @@ autoscan.log
 config.h
 config.log
 config.status
-depcomp
 Makefile
 sample/sample_c
 src/arow_learn
