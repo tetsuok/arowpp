@@ -59,17 +59,7 @@ class BinaryClassifierImpl : public BinaryClassifier {
   virtual bool Open(const char* filename);
   virtual bool Save(const char* filename);
   virtual bool Load(const char* filename);
-
-  virtual bool Classify(const char* line, Result* result) {
-    short label = 0;                      // true label
-    fv_t fv;
-    size_t dummy = 0;                     // dummy id
-    CHECK_FALSE(Tokenizer::Tokenize(line, &fv, &label, &dummy))
-        << "cannot classify ";
-    CHECK_FALSE(result->Add(label, Predict(fv)));
-
-    return true;
-  }
+  virtual bool Classify(const char* line, Result* result);
 
   virtual int get_num_iter() const { return num_iter_; }
   virtual unsigned int get_num_feature() const { return num_feature_; }
@@ -219,6 +209,17 @@ bool BinaryClassifierImpl::Load(const char *filename) {
   bifs.read(reinterpret_cast<char *>(&cov_[0]), cov_.size() * sizeof(float));
 
   bifs.close();
+
+  return true;
+}
+
+inline bool BinaryClassifierImpl::Classify(const char* line, Result* result) {
+  short label = 0;                      // true label
+  fv_t fv;
+  size_t dummy = 0;                     // dummy id
+  CHECK_FALSE(Tokenizer::Tokenize(line, &fv, &label, &dummy))
+      << "cannot classify ";
+  CHECK_FALSE(result->Add(label, Predict(fv)));
 
   return true;
 }
