@@ -15044,7 +15044,9 @@ fi
 
 
 
-for ac_header in stdlib.h string.h sys/time.h sys/types.h
+
+
+for ac_header in stdlib.h string.h sys/time.h sys/types.h unistd.h ctype.h
 do
 as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
 if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
@@ -18146,6 +18148,7 @@ case ${enable_werror} in
   yes) WERROR_FLAG="-Werror" ;;
     *) WERROR_FLAG="" ;;
 esac
+
 
 
 if test -n "$GCC"; then
