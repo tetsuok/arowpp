@@ -1,0 +1,42 @@
+2012-02-08  Tetsuo Kiso  <tetsuo.sakai21@gmail.com>
+
+	* AROW++: version 0.1
+	* Code refactoring.
+	* Use Autotools for building to remove the explicit build dependency.
+	* Use getopt() to parse command line options.
+	* Add --enable-gtest option for unit testing.
+
+2011-07-29  Tetsuo Kiso  <tetsuo.sakai21@gmail.com>
+
+	* AROW++: version 0.06
+	* Code refactoring.
+	* Speed up training and testing.
+	* Change floating-point data types used in the trained model parameters to reduce memory usage.
+
+2010-06-25  Tetsuo Kiso  <tetsuo.sakai21@gmail.com>
+
+	* AROW++: version 0.05
+	* Change floating-point data type.
+	* Fix usage message.
+
+2010-06-06  Tetsuo Kiso  <tetsuo.sakai21@gmail.com>
+
+	* AROW++: version 0.04
+	* Change the project name from ARROW.
+	* Change the program names and option settings.
+	* Provide C/C++ APIs.
+	* Code refactoring.
+
+2010-05-22  Tetsuo Kiso  <tetsuo.sakai21@gmail.com>
+
+	* ARROW: version 0.03
+	* Code refactoring.
+
+2010-05-20  Tetsuo Kiso  <tetsuo.sakai21@gmail.com>
+
+	* ARROW: version 0.02
+	* Separate the error handler from a header file.
+
+2010-03-23  Tetsuo Kiso  <tetsuo.sakai21@gmail.com>
+
+	* ARROW: initial release
