@@ -1,3 +1,8 @@
+if GCC
+# These are good warnings to turn on by default
+AM_CXXFLAGS = -Wall -Wwrite-strings -Woverloaded-virtual
+endif
+
 lib_LTLIBRARIES = libarowpp.la
 
 libarowpp_la_SOURCES = \

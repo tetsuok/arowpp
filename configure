@@ -744,7 +744,8 @@ OTOOL
 OTOOL64
 CPP
 CXXCPP
-WERROR_FLAG
+GCC_TRUE
+GCC_FALSE
 GTEST_CONFIG
 GTEST_CPPFLAGS
 GTEST_CXXFLAGS
@@ -1362,7 +1363,6 @@ Optional Features:
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --enable-werror         enable -Werror
   --enable-gtest          Enable tests using the Google C++ Testing Framework.
                           (Default is enabled.)
 
@@ -14855,11 +14855,23 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+ if test "$GCC" = yes; then
+  GCC_TRUE=
+  GCC_FALSE='#'
+else
+  GCC_TRUE='#'
+  GCC_FALSE=
+fi
+   # let the Makefile know if we're gcc
+
+# We don't want to use autoconf's default CXXFLAGS, which are usually "-g -O2".
+if test "x${ac_cv_env_CFLAGS_set}" = "x"; then
+  CFLAGS="-O3"
+fi
+
+if test "x${ac_cv_env_CXXFLAGS_set}" = "x"; then
+  CXXFLAGS="-O3"
+fi
 
 
 # Checks for libraries.
@@ -18136,26 +18148,6 @@ fi
 done
 
 
-# Enable -Werror
-# Check whether --enable-werror was given.
-if test "${enable_werror+set}" = set; then
-  enableval=$enable_werror;
-else
-  enable_werror=yes
-fi
-
-case ${enable_werror} in
-  yes) WERROR_FLAG="-Werror" ;;
-    *) WERROR_FLAG="" ;;
-esac
-
-
-
-if test -n "$GCC"; then
-   CFLAGS="-O3 -Wall "$WERROR_FLAG" "
-   CXXFLAGS="-O3 -Wall "$WERROR_FLAG" "
-fi
-
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
 # incompatible versions:
@@ -18490,6 +18482,13 @@ if test -z "${am__fastdepCC_TRUE}" && test -z "${am__fastdepCC_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"am__fastdepCC\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"am__fastdepCC\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${GCC_TRUE}" && test -z "${GCC_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"GCC\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"GCC\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -19545,7 +19544,8 @@ OTOOL!$OTOOL$ac_delim
 OTOOL64!$OTOOL64$ac_delim
 CPP!$CPP$ac_delim
 CXXCPP!$CXXCPP$ac_delim
-WERROR_FLAG!$WERROR_FLAG$ac_delim
+GCC_TRUE!$GCC_TRUE$ac_delim
+GCC_FALSE!$GCC_FALSE$ac_delim
 GTEST_CONFIG!$GTEST_CONFIG$ac_delim
 GTEST_CPPFLAGS!$GTEST_CPPFLAGS$ac_delim
 GTEST_CXXFLAGS!$GTEST_CXXFLAGS$ac_delim
@@ -19559,7 +19559,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 24; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 25; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
