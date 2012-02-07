@@ -18233,7 +18233,7 @@ test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 if test "${enable_gtest+set}" = set; then
   enableval=$enable_gtest;
 else
-  enable_gtest=
+  enable_gtest=no
 fi
 
 
