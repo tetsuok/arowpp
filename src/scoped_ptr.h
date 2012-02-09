@@ -69,7 +69,7 @@ class scoped_ptr {
   explicit scoped_ptr(T* p = NULL) : ptr_(p) {}
   ~scoped_ptr() { delete ptr_; }
 
-  T & operator*() const   { return *ptr_; }
+  T & operator*() const { return *ptr_; }
   T* operator->() const { return ptr_; }
   T* get() const { return ptr_; }
 

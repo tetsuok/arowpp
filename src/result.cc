@@ -59,7 +59,7 @@ class ResultImpl : public Result {
     return true;
   }
 
-  virtual void Show();
+  virtual void Show() const;
 
   virtual unsigned int get_true_positive() const { return results_[0]; }
   virtual unsigned int get_true_negative() const { return results_[1]; }
@@ -76,12 +76,12 @@ class ResultImpl : public Result {
   std::vector<unsigned int> results_;            // results of classification
 };
 
-void ResultImpl::Show() {
-  printf("Accuracy %.3f%% (%d/%d)\n(Answer, Predict): "
-         "(t,p):%d (t,n):%d (f,p):%d (f,n):%d\n",
-         static_cast<double>((num_instance_ - mistake_) * 100.0 / num_instance_),
-         num_instance_ - mistake_, num_instance_,
-         results_[0], results_[1], results_[2], results_[3]);
+void ResultImpl::Show() const {
+  std::printf("Accuracy %.3f%% (%d/%d)\n(Answer, Predict): "
+              "(t,p):%d (t,n):%d (f,p):%d (f,n):%d\n",
+              static_cast<double>((num_instance_ - mistake_) * 100.0 / num_instance_),
+              num_instance_ - mistake_, num_instance_,
+              results_[0], results_[1], results_[2], results_[3]);
 }
 
 // Get instance

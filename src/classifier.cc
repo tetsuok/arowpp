@@ -39,6 +39,7 @@
 #include "param.h"
 #include "model_reader_interface.h"
 #include "model_writer_interface.h"
+#include "logging.h"
 
 namespace arowpp {
 
@@ -55,7 +56,7 @@ class BinaryClassifierImpl : public BinaryClassifier {
 
   virtual bool Train(const char* filename);
   virtual bool Open(const char* filename);
-  virtual bool Save(const char* filename);
+  virtual bool Save(const char* filename) const;
   virtual bool Load(const char* filename);
   virtual bool Classify(const char* line, Result* result);
 
@@ -143,14 +144,19 @@ bool BinaryClassifierImpl::Open(const char *filename) {
   return true;
 }
 
-bool BinaryClassifierImpl::Save(const char *filename) {
-  CHECK_FALSE(param_->num_example != 0) << "Could not train examples";
+bool BinaryClassifierImpl::Save(const char *filename) const {
+  if (param_->num_example == 0) {
+    LOG(ERROR) << "Could not train examples";
+    return false;
+  }
 
   scoped_ptr<ModelWriterInterface> writer(
       ModelWriterFactory::GetModelWriter());
 
-  CHECK_FALSE(writer->Open(filename, param_.get()))
-      << "Failed to save model " << filename;
+  if (!writer->Open(filename, param_.get())) {
+    LOG(ERROR) << "Failed to save trained model to disk.";
+    return false;
+  }
 
   std::cout << "Number of features: " << param_->num_feature << "\n"
             << "Number of examples: "
@@ -170,13 +176,21 @@ bool BinaryClassifierImpl::Load(const char *filename) {
   return true;
 }
 
-inline bool BinaryClassifierImpl::Classify(const char* line, Result* result) {
+inline bool BinaryClassifierImpl::Classify(const char* line,
+                                           Result* result) {
   short label = 0;                      // true label
   fv_t fv;
   size_t dummy = 0;                     // dummy id
-  CHECK_FALSE(Tokenizer::Tokenize(line, &fv, &label, &dummy))
-      << "cannot classify ";
-  CHECK_FALSE(result->Add(label, Predict(fv)));
+
+  if (!Tokenizer::Tokenize(line, &fv, &label, &dummy)) {
+    LOG(ERROR) << "Cannot classify";
+    return false;
+  }
+
+  if (!result->Add(label, Predict(fv))) {
+    LOG(ERROR) << "Failed to count the classified example.";
+    return false;
+  }
 
   return true;
 }

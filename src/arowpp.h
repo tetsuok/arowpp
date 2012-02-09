@@ -136,7 +136,7 @@ extern "C" {
 
 namespace arowpp {
 
-// Result of classification
+// Result of binary classification problems.
 class Result {
  public:
   virtual ~Result() {}
@@ -147,7 +147,7 @@ class Result {
   virtual bool Add(short y, short predict) = 0;
 
   // Print result of classification
-  virtual void Show() = 0;
+  virtual void Show() const = 0;
 
   // Get true positive
   virtual unsigned int get_true_positive() const = 0;
@@ -161,21 +161,21 @@ class Result {
   // Get false negative
   virtual unsigned int get_false_negative() const = 0;
 
-// Get the number of instances classified
+  // Get the number of instances classified
   virtual unsigned int get_num_instance() const = 0;
 
-  // Get number of mistakes
+  // Get the number of mistakes
   virtual unsigned int get_mistake() const = 0;
 
   static Result* instance();
 };
 
 
-// This class is an implementation of Adaptive Regularization
-// of Weight (AROW) algorithm that is a binary classifier.
+// This class implements Adaptive Regularization
+// of Weight (AROW) algorithm in the case of binary classification problems.
 // For details, see:
 // Crammer K., Kulesza A. and Dredze M.,
-// "Adaptive Regularization of Weight Vectors". NIPS 2009.
+// "Adaptive Regularization of Weight Vectors". In Proc. of NIPS 2009.
 class BinaryClassifier {
  public:
   virtual ~BinaryClassifier() {}
@@ -190,7 +190,7 @@ class BinaryClassifier {
   virtual bool Load(const char* filename) = 0;
 
   // Save model file.
-  virtual bool Save(const char* filename) = 0;
+  virtual bool Save(const char* filename) const = 0;
 
   // Predict label for test examples.
   virtual bool Classify(const char* line, Result* result) = 0;
