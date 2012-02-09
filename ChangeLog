@@ -1,3 +1,9 @@
+2012-02-10  Tetsuo Kiso  <tetsuo.sakai21@gmail.com>
+
+	* AROW++: version 0.1.2
+	* Implementaion clean-ups.
+	* Add an API to calculate the accuracy.
+
 2012-02-09  Tetsuo Kiso  <tetsuo.sakai21@gmail.com>
 
 	* AROW++: version 0.1.1
