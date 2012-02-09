@@ -59,6 +59,8 @@
 #ifndef AROWPP_SCOPED_PTR_H_
 #define AROWPP_SCOPED_PTR_H_
 
+namespace arowpp {
+
 template <class T>
 class scoped_ptr {
  public:
@@ -85,5 +87,7 @@ class scoped_ptr {
 
   typedef scoped_ptr<T> this_type;
 };
+
+} // namespace arowpp
 
 #endif  // AROWPP_SCOPED_PTR_H_
