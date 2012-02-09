@@ -82,7 +82,7 @@ int arowpp_load(arowpp_classifier_t* classifier,
   return classifier->ptr->Load(filename);
 }
 
-int arowpp_save(arowpp_classifier_t* classifier,
+int arowpp_save(const arowpp_classifier_t* classifier,
                 const char* filename) {
   return classifier->ptr->Save(filename);
 }
@@ -93,27 +93,27 @@ int arowpp_classify(arowpp_classifier_t* classifier,
   return classifier->ptr->Classify(line, result->ptr);
 }
 
-int arowpp_get_num_iter(arowpp_classifier_t* classifier) {
+int arowpp_get_num_iter(const arowpp_classifier_t* classifier) {
   return classifier->ptr->get_num_iter();
 }
 
-int arowpp_get_num_feature(arowpp_classifier_t* classifier) {
+int arowpp_get_num_feature(const arowpp_classifier_t* classifier) {
   return classifier->ptr->get_num_feature();
 }
 
-size_t arowpp_get_num_example(arowpp_classifier_t* classifier) {
+size_t arowpp_get_num_example(const arowpp_classifier_t* classifier) {
   return classifier->ptr->get_num_example();
 }
 
-size_t arowpp_get_num_update(arowpp_classifier_t* classifier) {
+size_t arowpp_get_num_update(const arowpp_classifier_t* classifier) {
   return classifier->ptr->get_num_update();
 }
 
-double arowpp_get_r(arowpp_classifier_t* classifier) {
+double arowpp_get_r(const arowpp_classifier_t* classifier) {
   return classifier->ptr->get_r();
 }
 
-int arowpp_is_shuffled(arowpp_classifier_t* classifier) {
+int arowpp_is_shuffled(const arowpp_classifier_t* classifier) {
   return classifier->ptr->is_shuffled();
 }
 
@@ -158,34 +158,35 @@ void arowpp_result_add(arowpp_result_t* result, short y, short predict) {
   result->ptr->Add(y, predict);
 }
 
-void arowpp_result_show(arowpp_result_t* result) {
+void arowpp_result_show(const arowpp_result_t* result) {
   result->ptr->Show();
 }
 
-int arowpp_result_get_true_positive(arowpp_result_t* result) {
 double arowpp_result_calc_accuracy(const arowpp_result_t* result) {
   return result->ptr->CalcAccuracy();
 }
+
+int arowpp_result_get_true_positive(const arowpp_result_t* result) {
   return result->ptr->get_true_positive();
 }
 
-int arowpp_result_get_true_negative(arowpp_result_t* result) {
+int arowpp_result_get_true_negative(const arowpp_result_t* result) {
   return result->ptr->get_true_negative();
 }
 
-int arowpp_result_get_false_positive(arowpp_result_t* result) {
+int arowpp_result_get_false_positive(const arowpp_result_t* result) {
   return result->ptr->get_false_positive();
 }
 
-int arowpp_result_get_false_negative(arowpp_result_t* result) {
+int arowpp_result_get_false_negative(const arowpp_result_t* result) {
   return result->ptr->get_false_negative();
 }
 
-int arowpp_result_get_num_instance(arowpp_result_t* result) {
+int arowpp_result_get_num_instance(const arowpp_result_t* result) {
   return result->ptr->get_num_instance();
 }
 
-int arowpp_result_get_mistake(arowpp_result_t* result) {
+int arowpp_result_get_mistake(const arowpp_result_t* result) {
   return result->ptr->get_mistake();
 }
 

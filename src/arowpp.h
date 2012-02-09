@@ -70,24 +70,24 @@ extern "C" {
   AROWPP_DLL_EXTERN int arowpp_load(arowpp_classifier_t* classifier,
                                     const char* filename);
 
-  AROWPP_DLL_EXTERN int arowpp_save(arowpp_classifier_t* classifier,
+  AROWPP_DLL_EXTERN int arowpp_save(const arowpp_classifier_t* classifier,
                                     const char* filename);
 
   AROWPP_DLL_EXTERN int arowpp_classify(arowpp_classifier_t* classifier,
                                         const char* line,
                                         arowpp_result_t* result);
 
-  AROWPP_DLL_EXTERN int arowpp_get_num_iter(arowpp_classifier_t* classifier);
+  AROWPP_DLL_EXTERN int arowpp_get_num_iter(const arowpp_classifier_t* classifier);
 
-  AROWPP_DLL_EXTERN int arowpp_get_num_feature(arowpp_classifier_t* classifier);
+  AROWPP_DLL_EXTERN int arowpp_get_num_feature(const arowpp_classifier_t* classifier);
 
-  AROWPP_DLL_EXTERN size_t arowpp_get_num_example(arowpp_classifier_t* classifier);
+  AROWPP_DLL_EXTERN size_t arowpp_get_num_example(const arowpp_classifier_t* classifier);
 
-  AROWPP_DLL_EXTERN size_t arowpp_get_num_update(arowpp_classifier_t* classifier);
+  AROWPP_DLL_EXTERN size_t arowpp_get_num_update(const arowpp_classifier_t* classifier);
 
-  AROWPP_DLL_EXTERN double arowpp_get_r(arowpp_classifier_t* classifier);
+  AROWPP_DLL_EXTERN double arowpp_get_r(const arowpp_classifier_t* classifier);
 
-  AROWPP_DLL_EXTERN int arowpp_is_shuffled(arowpp_classifier_t* classifier);
+  AROWPP_DLL_EXTERN int arowpp_is_shuffled(const arowpp_classifier_t* classifier);
 
   AROWPP_DLL_EXTERN void arowpp_set_num_feature(arowpp_classifier_t* classifier,
                                                 unsigned int num);
@@ -110,20 +110,21 @@ extern "C" {
   AROWPP_DLL_EXTERN void arowpp_result_add(arowpp_result_t* result,
                                            short y, short label);
 
-  AROWPP_DLL_EXTERN void arowpp_result_show(arowpp_result_t* result);
+  AROWPP_DLL_EXTERN void arowpp_result_show(const arowpp_result_t* result);
 
-  AROWPP_DLL_EXTERN int arowpp_result_get_true_positive(arowpp_result_t* result);
   AROWPP_DLL_EXTERN double arowpp_result_calc_accuracy(const arowpp_result_t* result);
 
-  AROWPP_DLL_EXTERN int arowpp_result_get_true_negative(arowpp_result_t* result);
+  AROWPP_DLL_EXTERN int arowpp_result_get_true_positive(const arowpp_result_t* result);
 
-  AROWPP_DLL_EXTERN int arowpp_result_get_false_positive(arowpp_result_t* result);
+  AROWPP_DLL_EXTERN int arowpp_result_get_true_negative(const arowpp_result_t* result);
 
-  AROWPP_DLL_EXTERN int arowpp_result_get_false_negative(arowpp_result_t* result);
+  AROWPP_DLL_EXTERN int arowpp_result_get_false_positive(const arowpp_result_t* result);
 
-  AROWPP_DLL_EXTERN int arowpp_result_get_num_instance(arowpp_result_t* result);
+  AROWPP_DLL_EXTERN int arowpp_result_get_false_negative(const arowpp_result_t* result);
 
-  AROWPP_DLL_EXTERN int arowpp_result_get_mistake(arowpp_result_t* result);
+  AROWPP_DLL_EXTERN int arowpp_result_get_num_instance(const arowpp_result_t* result);
+
+  AROWPP_DLL_EXTERN int arowpp_result_get_mistake(const arowpp_result_t* result);
 
 
 #endif  // SWIG
