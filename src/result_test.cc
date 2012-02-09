@@ -61,6 +61,7 @@ TEST_F(ResultTest, AddTest) {
   EXPECT_EQ(1, result_->get_true_negative());
   EXPECT_EQ(1, result_->get_false_positive());
   EXPECT_EQ(1, result_->get_false_negative());
+  EXPECT_DOUBLE_EQ(50.0, result_->CalcAccuracy());
 }
 
 } // namespace arowpp

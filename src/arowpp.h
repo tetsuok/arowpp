@@ -149,6 +149,9 @@ class Result {
   // Print result of classification
   virtual void Show() const = 0;
 
+  // Calculate the accuracy
+  virtual double CalcAccuracy() const = 0;
+
   // Get true positive
   virtual unsigned int get_true_positive() const = 0;
 

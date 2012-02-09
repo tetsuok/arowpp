@@ -61,6 +61,10 @@ class ResultImpl : public Result {
 
   virtual void Show() const;
 
+  virtual double CalcAccuracy() const {
+    return static_cast<double>((num_instance_ - mistake_) * 100.0 / num_instance_);
+  }
+
   virtual unsigned int get_true_positive() const { return results_[0]; }
   virtual unsigned int get_true_negative() const { return results_[1]; }
   virtual unsigned int get_false_positive() const { return results_[2]; }
@@ -79,7 +83,7 @@ class ResultImpl : public Result {
 void ResultImpl::Show() const {
   std::printf("Accuracy %.3f%% (%d/%d)\n(Answer, Predict): "
               "(t,p):%d (t,n):%d (f,p):%d (f,n):%d\n",
-              static_cast<double>((num_instance_ - mistake_) * 100.0 / num_instance_),
+              CalcAccuracy(),
               num_instance_ - mistake_, num_instance_,
               results_[0], results_[1], results_[2], results_[3]);
 }
