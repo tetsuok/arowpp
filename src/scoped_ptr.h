@@ -59,9 +59,6 @@
 #ifndef AROWPP_SCOPED_PTR_H_
 #define AROWPP_SCOPED_PTR_H_
 
-#include <cstring>
-#include <string>
-
 template <class T>
 class scoped_ptr {
  public:

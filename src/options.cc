@@ -35,7 +35,15 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
+
 #include "scoped_ptr.h"
 
 namespace arowpp {

@@ -33,9 +33,13 @@
 #ifndef AROWPP_TIMER_H_
 #define AROWPP_TIMER_H_
 
-#include <time.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
-#include <stdio.h>
+#endif
 
 namespace arowpp {
 namespace {

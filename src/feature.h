@@ -34,8 +34,6 @@
 #define AROWPP_FEATURE_H_
 
 #include "common.h"
-#include <cstring>
-#include <ctype.h>
 
 namespace arowpp {
 

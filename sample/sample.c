@@ -33,9 +33,10 @@
 
 /* A sample C program */
 
+#include "arowpp.h"
+
 #include <stdlib.h>
 #include <string.h>
-#include "arowpp.h"
 
 /* You have to set this size according to the data set. */
 /* #define BUF_SIZE 65536 */
