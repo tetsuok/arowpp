@@ -44,8 +44,22 @@
 extern "C" {
 #endif
 
+#if defined(_WIN32) && !defined(__CYGWIN__)
+#include <windows.h>
+# ifdef DLL_EXPORT
+#   define AROWPP_DLL_EXTERN __declspec(dllexport)
+#   define AROWPP_DLL_CLASS_EXTERN  __declspec(dllexport)
+# else
+#   define AROWPP_DLL_EXTERN __declspec(dllimport)
+# endif  // DLL_EXPORT
+#endif   // _WIN32 && !_CYGWIN
+
 #ifndef AROWPP_DLL_EXTERN
 #define AROWPP_DLL_EXTERN extern
+#endif
+
+#ifndef AROWPP_DLL_CLASS_EXTERN
+#define AROWPP_DLL_CLASS_EXTERN
 #endif
 
 #ifndef SWIG
@@ -139,7 +153,7 @@ extern "C" {
 namespace arowpp {
 
 // Result of binary classification problems.
-class Result {
+class AROWPP_DLL_CLASS_EXTERN Result {
  public:
   virtual ~Result() {}
 
@@ -181,7 +195,7 @@ class Result {
 // For details, see:
 // Crammer K., Kulesza A. and Dredze M.,
 // "Adaptive Regularization of Weight Vectors". In Proc. of NIPS 2009.
-class BinaryClassifier {
+class AROWPP_DLL_CLASS_EXTERN BinaryClassifier {
  public:
   virtual ~BinaryClassifier() {}
 
