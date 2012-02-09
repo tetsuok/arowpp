@@ -113,6 +113,7 @@ extern "C" {
   AROWPP_DLL_EXTERN void arowpp_result_show(arowpp_result_t* result);
 
   AROWPP_DLL_EXTERN int arowpp_result_get_true_positive(arowpp_result_t* result);
+  AROWPP_DLL_EXTERN double arowpp_result_calc_accuracy(const arowpp_result_t* result);
 
   AROWPP_DLL_EXTERN int arowpp_result_get_true_negative(arowpp_result_t* result);
 

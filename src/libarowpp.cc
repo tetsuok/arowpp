@@ -163,6 +163,9 @@ void arowpp_result_show(arowpp_result_t* result) {
 }
 
 int arowpp_result_get_true_positive(arowpp_result_t* result) {
+double arowpp_result_calc_accuracy(const arowpp_result_t* result) {
+  return result->ptr->CalcAccuracy();
+}
   return result->ptr->get_true_positive();
 }
 
