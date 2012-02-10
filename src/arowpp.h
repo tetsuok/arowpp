@@ -1,36 +1,36 @@
 /* Copyright (c) 2010-2012, Tetsuo Kiso
- *  All rights reserved.
+ * All rights reserved.
  *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions
- *  are met:
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
  *
  *    * Redistributions of source code must retain the above
- *  copyright notice, this list of conditions and the
- *  following disclaimer.
+ * copyright notice, this list of conditions and the
+ * following disclaimer.
  *
  *    * Redistributions in binary form must reproduce the above
- *  copyright notice, this list of conditions and the
- *  following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ * copyright notice, this list of conditions and the
+ * following disclaimer in the documentation and/or other
+ * materials provided with the distribution.
  *
  *    * Neither the name of Tetsuo Kiso nor the names of its contributors
- *  may be used to endorse or promote products derived from this software
- *  without specific prior written permission.
+ * may be used to endorse or promote products derived from this software
+ * without specific prior written permission.
  *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- *  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- *  C and C++ interface.
+ * C and C++ interface.
  */
 
 #ifndef AROWPP_AROWPP_H_
@@ -66,89 +66,93 @@ extern "C" {
 #endif
 
 #ifndef SWIG
-  typedef struct arowpp_classifier_t arowpp_classifier_t;
-  typedef struct arowpp_result_t arowpp_result_t;
 
-  AROWPP_DLL_EXTERN int arow_learn(int argc, char** argv);
-  AROWPP_DLL_EXTERN int arow_test(int argc, char** argv);
+/* Exported types */
+typedef struct arowpp_classifier_t arowpp_classifier_t;
+typedef struct arowpp_result_t arowpp_result_t;
 
-  /* Binary classifier */
+AROWPP_DLL_EXTERN int arow_learn(int argc, char** argv);
 
-  /* Allocate memory for the object of the BinaryClassifier on the heap.
-   * Caller should be delete the returned pointer when it is no longer needed.
-   */
-  AROWPP_DLL_EXTERN arowpp_classifier_t* arowpp_classifier_new();
+AROWPP_DLL_EXTERN int arow_test(int argc, char** argv);
 
-  AROWPP_DLL_EXTERN void arowpp_classifier_destroy(arowpp_classifier_t* classifier);
+/* Binary classifier */
 
-  AROWPP_DLL_EXTERN int arowpp_train(arowpp_classifier_t* classifier,
-                                     const char* filename);
+/* Allocate memory for the object of the BinaryClassifier on the heap.
+ * Caller should be delete the returned pointer when it is no longer needed.
+ */
+AROWPP_DLL_EXTERN arowpp_classifier_t* arowpp_classifier_new();
 
-  AROWPP_DLL_EXTERN int arowpp_open(arowpp_classifier_t* classifier,
-                                    const char* filename);
+AROWPP_DLL_EXTERN void arowpp_classifier_destroy(arowpp_classifier_t* classifier);
 
-  AROWPP_DLL_EXTERN int arowpp_load(arowpp_classifier_t* classifier,
-                                    const char* filename);
+AROWPP_DLL_EXTERN int arowpp_train(arowpp_classifier_t* classifier,
+                                   const char* filename);
 
-  AROWPP_DLL_EXTERN int arowpp_save(const arowpp_classifier_t* classifier,
-                                    const char* filename);
+AROWPP_DLL_EXTERN int arowpp_open(arowpp_classifier_t* classifier,
+                                  const char* filename);
 
-  AROWPP_DLL_EXTERN int arowpp_classify(arowpp_classifier_t* classifier,
-                                        const char* line,
-                                        arowpp_result_t* result);
+AROWPP_DLL_EXTERN int arowpp_load(arowpp_classifier_t* classifier,
+                                  const char* filename);
 
-  AROWPP_DLL_EXTERN int arowpp_get_num_iter(const arowpp_classifier_t* classifier);
+AROWPP_DLL_EXTERN int arowpp_save(const arowpp_classifier_t* classifier,
+                                  const char* filename);
 
-  AROWPP_DLL_EXTERN int arowpp_get_num_feature(const arowpp_classifier_t* classifier);
+AROWPP_DLL_EXTERN int arowpp_classify(arowpp_classifier_t* classifier,
+                                      const char* line,
+                                      arowpp_result_t* result);
 
-  AROWPP_DLL_EXTERN size_t arowpp_get_num_example(const arowpp_classifier_t* classifier);
+AROWPP_DLL_EXTERN int arowpp_get_num_iter(const arowpp_classifier_t* classifier);
 
-  AROWPP_DLL_EXTERN size_t arowpp_get_num_update(const arowpp_classifier_t* classifier);
+AROWPP_DLL_EXTERN int arowpp_get_num_feature(const arowpp_classifier_t* classifier);
 
-  AROWPP_DLL_EXTERN double arowpp_get_r(const arowpp_classifier_t* classifier);
+AROWPP_DLL_EXTERN size_t arowpp_get_num_example(const arowpp_classifier_t* classifier);
 
-  AROWPP_DLL_EXTERN int arowpp_is_shuffled(const arowpp_classifier_t* classifier);
+AROWPP_DLL_EXTERN size_t arowpp_get_num_update(const arowpp_classifier_t* classifier);
 
-  AROWPP_DLL_EXTERN void arowpp_set_num_feature(arowpp_classifier_t* classifier,
-                                                unsigned int num);
+AROWPP_DLL_EXTERN double arowpp_get_r(const arowpp_classifier_t* classifier);
 
-  AROWPP_DLL_EXTERN void arowpp_set_iter(arowpp_classifier_t* classifier,
-                                         int iter);
+AROWPP_DLL_EXTERN int arowpp_is_shuffled(const arowpp_classifier_t* classifier);
 
-  AROWPP_DLL_EXTERN void arowpp_set_r(arowpp_classifier_t* classifier, double r);
+AROWPP_DLL_EXTERN void arowpp_set_num_feature(arowpp_classifier_t* classifier,
+                                              unsigned int num);
 
-  AROWPP_DLL_EXTERN void arowpp_set_shuffle(arowpp_classifier_t* classifier,
-                                            int is_shuffled);
+AROWPP_DLL_EXTERN void arowpp_set_iter(arowpp_classifier_t* classifier,
+                                       int iter);
 
-  AROWPP_DLL_EXTERN const char* arowpp_classifier_error(arowpp_classifier_t* classifier);
+AROWPP_DLL_EXTERN void arowpp_set_r(arowpp_classifier_t* classifier, double r);
 
-  /* Result */
+AROWPP_DLL_EXTERN void arowpp_set_shuffle(arowpp_classifier_t* classifier,
+                                          int is_shuffled);
 
-  /* Allocate memory for an object of the Result on the heap.
-   * Caller should be delete the returned pointer when it is no longer needed.
-   */
-  AROWPP_DLL_EXTERN arowpp_result_t* arowpp_result_new();
+AROWPP_DLL_EXTERN const char* arowpp_classifier_error(arowpp_classifier_t* classifier);
 
-  AROWPP_DLL_EXTERN void arowpp_result_destroy(arowpp_result_t* result);
+/* Result */
 
-  AROWPP_DLL_EXTERN void arowpp_result_add(arowpp_result_t* result,
-                                           short y, short label);
+/* Allocate memory for an object of the Result on the heap.
+ * Caller should be delete the returned pointer when it is no longer needed.
+ */
+AROWPP_DLL_EXTERN arowpp_result_t* arowpp_result_new();
 
-  AROWPP_DLL_EXTERN void arowpp_result_show(const arowpp_result_t* result);
+AROWPP_DLL_EXTERN void arowpp_result_destroy(arowpp_result_t* result);
 
-  AROWPP_DLL_EXTERN double arowpp_result_calc_accuracy(const arowpp_result_t* result);
+AROWPP_DLL_EXTERN void arowpp_result_add(arowpp_result_t* result,
+                                         short y, short label);
 
-  AROWPP_DLL_EXTERN int arowpp_result_get_true_positive(const arowpp_result_t* result);
+AROWPP_DLL_EXTERN void arowpp_result_show(const arowpp_result_t* result);
 
-  AROWPP_DLL_EXTERN int arowpp_result_get_true_negative(const arowpp_result_t* result);
+AROWPP_DLL_EXTERN double arowpp_result_calc_accuracy(const arowpp_result_t* result);
 
-  AROWPP_DLL_EXTERN int arowpp_result_get_false_positive(const arowpp_result_t* result);
+AROWPP_DLL_EXTERN int arowpp_result_get_true_positive(const arowpp_result_t* result);
 
-  AROWPP_DLL_EXTERN int arowpp_result_get_false_negative(const arowpp_result_t* result);
+AROWPP_DLL_EXTERN int arowpp_result_get_true_negative(const arowpp_result_t* result);
 
-  AROWPP_DLL_EXTERN int arowpp_result_get_num_instance(const arowpp_result_t* result);
+AROWPP_DLL_EXTERN int arowpp_result_get_false_positive(const arowpp_result_t* result);
 
-  AROWPP_DLL_EXTERN int arowpp_result_get_mistake(const arowpp_result_t* result);
+AROWPP_DLL_EXTERN int arowpp_result_get_false_negative(const arowpp_result_t* result);
+
+AROWPP_DLL_EXTERN int arowpp_result_get_num_instance(const arowpp_result_t* result);
+
+AROWPP_DLL_EXTERN int arowpp_result_get_mistake(const arowpp_result_t* result);
+
 #endif  /* SWIG */
 
 #ifdef __cplusplus
@@ -288,8 +292,17 @@ class AROWPP_DLL_CLASS_EXTERN BinaryClassifier {
 };
 
 #ifndef SWIG
+
+/* An factory method to create a new Result object.
+ * Caller should be delete the returned pointer when it is no longer needed.
+ */
 AROWPP_DLL_EXTERN Result* createResult();
+
+/* An factory method to create a new BinaryClassifier object.
+ * Caller should be delete the returned pointer when it is no longer needed.
+ */
 AROWPP_DLL_EXTERN BinaryClassifier* createBinaryClassifier();
+
 #endif  /* SWIG */
 } /* namespace arowpp */
 
