@@ -263,10 +263,15 @@ top_srcdir = @top_srcdir@
 # These are good warnings to turn on by default
 @GCC_TRUE@AM_CXXFLAGS = \
 @GCC_TRUE@	-Wall \
+@GCC_TRUE@	-Wcast-align \
+@GCC_TRUE@	-Wcast-qual \
 @GCC_TRUE@	-Wconversion \
+@GCC_TRUE@	-Wextra \
 @GCC_TRUE@	-Wfloat-equal \
 @GCC_TRUE@	-Woverloaded-virtual \
 @GCC_TRUE@	-Wparentheses \
+@GCC_TRUE@	-Wpointer-arith \
+@GCC_TRUE@	-Wswitch-enum \
 @GCC_TRUE@	-Wwrite-strings
 
 lib_LTLIBRARIES = libarowpp.la

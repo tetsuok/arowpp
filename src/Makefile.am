@@ -2,10 +2,15 @@ if GCC
 # These are good warnings to turn on by default
 AM_CXXFLAGS = \
 	-Wall \
+	-Wcast-align \
+	-Wcast-qual \
 	-Wconversion \
+	-Wextra \
 	-Wfloat-equal \
 	-Woverloaded-virtual \
 	-Wparentheses \
+	-Wpointer-arith \
+	-Wswitch-enum \
 	-Wwrite-strings
 endif
 
