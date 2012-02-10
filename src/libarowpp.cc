@@ -97,7 +97,7 @@ int arowpp_get_num_iter(const arowpp_classifier_t* classifier) {
   return classifier->ptr->get_num_iter();
 }
 
-int arowpp_get_num_feature(const arowpp_classifier_t* classifier) {
+size_t arowpp_get_num_feature(const arowpp_classifier_t* classifier) {
   return classifier->ptr->get_num_feature();
 }
 
@@ -118,7 +118,7 @@ int arowpp_is_shuffled(const arowpp_classifier_t* classifier) {
 }
 
 void arowpp_set_num_feature(arowpp_classifier_t* classifier,
-                            int num) {
+                            size_t num) {
   classifier->ptr->set_num_feature(num);
 }
 
@@ -166,27 +166,27 @@ double arowpp_result_calc_accuracy(const arowpp_result_t* result) {
   return result->ptr->CalcAccuracy();
 }
 
-int arowpp_result_get_true_positive(const arowpp_result_t* result) {
+unsigned int arowpp_result_get_true_positive(const arowpp_result_t* result) {
   return result->ptr->get_true_positive();
 }
 
-int arowpp_result_get_true_negative(const arowpp_result_t* result) {
+unsigned int arowpp_result_get_true_negative(const arowpp_result_t* result) {
   return result->ptr->get_true_negative();
 }
 
-int arowpp_result_get_false_positive(const arowpp_result_t* result) {
+unsigned int arowpp_result_get_false_positive(const arowpp_result_t* result) {
   return result->ptr->get_false_positive();
 }
 
-int arowpp_result_get_false_negative(const arowpp_result_t* result) {
+unsigned int arowpp_result_get_false_negative(const arowpp_result_t* result) {
   return result->ptr->get_false_negative();
 }
 
-int arowpp_result_get_num_instance(const arowpp_result_t* result) {
+unsigned int arowpp_result_get_num_instance(const arowpp_result_t* result) {
   return result->ptr->get_num_instance();
 }
 
-int arowpp_result_get_mistake(const arowpp_result_t* result) {
+unsigned int arowpp_result_get_mistake(const arowpp_result_t* result) {
   return result->ptr->get_mistake();
 }
 

@@ -17,9 +17,9 @@ bool Tokenizer::Tokenize(const char* line, fv_t* fv, short* y,
   while (isspace(*line) && *line) line++;
   while (1) {
     const char *begin = line;
-    unsigned int index = std::atol(begin);
+    unsigned int index = static_cast<unsigned int>(std::atol(begin));
     while (*line != ':' && *line) line++;
-    float val = std::atof(++line);
+    float val = static_cast<float>(std::atof(++line));
 
     while (*line != ' ' && *line) line++;
     fv->push_back(std::make_pair(index, val));

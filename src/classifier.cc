@@ -61,13 +61,13 @@ class BinaryClassifierImpl : public BinaryClassifier {
   virtual bool Classify(const char* line, Result* result);
 
   virtual int get_num_iter() const { return param_->num_iter; }
-  virtual unsigned int get_num_feature() const { return param_->num_feature; }
+  virtual size_t get_num_feature() const { return param_->num_feature; }
   virtual size_t get_num_example() const { return param_->num_example; }
   virtual size_t get_num_update() const { return param_->num_update; }
   virtual double get_r() const { return param_->r; }
   virtual bool is_shuffled() const { return param_->is_shuffled; }
 
-  virtual void set_num_feature(unsigned int num_feature) {
+  virtual void set_num_feature(size_t num_feature) {
     param_->num_feature = num_feature;
   }
 
@@ -86,10 +86,10 @@ class BinaryClassifierImpl : public BinaryClassifier {
 
   // Makes a prediction from sign of margin.
   // Returns the predicted label.
-  int Predict(const fv_t &fv) {
+  short Predict(const fv_t &fv) {
     ResizeWeight(fv);
     const double m = GetMargin(fv);
-    return m > 0.0 ? 1 : -1;
+    return (m > 0.0) ? 1 : -1;
   }
 
   double GetMargin(const fv_t& fv) const {
@@ -213,7 +213,7 @@ void BinaryClassifierImpl::Update(const fv_t &fv, short label) {
       const unsigned int id = it->first;
       const float val = it->second;
       param_->mean[id] += alpha * label * param_->cov[id] * val;
-      param_->cov[id] = 1.f / ((1.f / param_->cov[id]) + val * val / param_->r);
+      param_->cov[id] = 1.f / ((1.f / param_->cov[id]) + val * val / static_cast<float>(param_->r));
     }
   }
 }

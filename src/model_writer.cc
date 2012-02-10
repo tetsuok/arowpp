@@ -71,10 +71,12 @@ bool ModelWriter::Open(const char* filename, const Param* param) const {
   bofs.write(reinterpret_cast<const char *>(&param->is_shuffled), sizeof(param->is_shuffled));
 
   // mean
-  bofs.write(reinterpret_cast<const char *>(&param->mean[0]), param->mean.size() * sizeof(float));
+  bofs.write(reinterpret_cast<const char *>(&param->mean[0]),
+             static_cast<std::streamsize>(param->mean.size() * sizeof(float)));
 
   // covariance
-  bofs.write(reinterpret_cast<const char *>(&param->cov[0]), param->cov.size() * sizeof(float));
+  bofs.write(reinterpret_cast<const char *>(&param->cov[0]),
+             static_cast<std::streamsize>(param->cov.size() * sizeof(float)));
 
   bofs.close();
 

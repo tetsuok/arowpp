@@ -102,7 +102,7 @@ AROWPP_DLL_EXTERN int arowpp_classify(arowpp_classifier_t* classifier,
 
 AROWPP_DLL_EXTERN int arowpp_get_num_iter(const arowpp_classifier_t* classifier);
 
-AROWPP_DLL_EXTERN int arowpp_get_num_feature(const arowpp_classifier_t* classifier);
+AROWPP_DLL_EXTERN size_t arowpp_get_num_feature(const arowpp_classifier_t* classifier);
 
 AROWPP_DLL_EXTERN size_t arowpp_get_num_example(const arowpp_classifier_t* classifier);
 
@@ -113,7 +113,7 @@ AROWPP_DLL_EXTERN double arowpp_get_r(const arowpp_classifier_t* classifier);
 AROWPP_DLL_EXTERN int arowpp_is_shuffled(const arowpp_classifier_t* classifier);
 
 AROWPP_DLL_EXTERN void arowpp_set_num_feature(arowpp_classifier_t* classifier,
-                                              unsigned int num);
+                                              size_t num);
 
 AROWPP_DLL_EXTERN void arowpp_set_iter(arowpp_classifier_t* classifier,
                                        int iter);
@@ -141,17 +141,17 @@ AROWPP_DLL_EXTERN void arowpp_result_show(const arowpp_result_t* result);
 
 AROWPP_DLL_EXTERN double arowpp_result_calc_accuracy(const arowpp_result_t* result);
 
-AROWPP_DLL_EXTERN int arowpp_result_get_true_positive(const arowpp_result_t* result);
+AROWPP_DLL_EXTERN unsigned int arowpp_result_get_true_positive(const arowpp_result_t* result);
 
-AROWPP_DLL_EXTERN int arowpp_result_get_true_negative(const arowpp_result_t* result);
+AROWPP_DLL_EXTERN unsigned int arowpp_result_get_true_negative(const arowpp_result_t* result);
 
-AROWPP_DLL_EXTERN int arowpp_result_get_false_positive(const arowpp_result_t* result);
+AROWPP_DLL_EXTERN unsigned int arowpp_result_get_false_positive(const arowpp_result_t* result);
 
-AROWPP_DLL_EXTERN int arowpp_result_get_false_negative(const arowpp_result_t* result);
+AROWPP_DLL_EXTERN unsigned int arowpp_result_get_false_negative(const arowpp_result_t* result);
 
-AROWPP_DLL_EXTERN int arowpp_result_get_num_instance(const arowpp_result_t* result);
+AROWPP_DLL_EXTERN unsigned int arowpp_result_get_num_instance(const arowpp_result_t* result);
 
-AROWPP_DLL_EXTERN int arowpp_result_get_mistake(const arowpp_result_t* result);
+AROWPP_DLL_EXTERN unsigned int arowpp_result_get_mistake(const arowpp_result_t* result);
 
 #endif  /* SWIG */
 
@@ -253,7 +253,7 @@ class AROWPP_DLL_CLASS_EXTERN BinaryClassifier {
   /* Get the number of features.
    * It means that the maximum feature ID as well.
    */
-  virtual unsigned int get_num_feature() const = 0;
+  virtual size_t get_num_feature() const = 0;
 
   /* Get the number of examples we have ever seen. */
   virtual size_t get_num_example() const = 0;
@@ -271,7 +271,7 @@ class AROWPP_DLL_CLASS_EXTERN BinaryClassifier {
    * It means that we set the maximum feature IDs, and resize
    * the parameter space as well.
    */
-  virtual void set_num_feature(unsigned int num_feature) = 0;
+  virtual void set_num_feature(size_t num_feature) = 0;
 
   /* Set the number of iterations to be performed. */
   virtual void set_num_iter(int num_iter) = 0;

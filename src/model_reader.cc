@@ -73,8 +73,10 @@ bool ModelReader::Open(const char* filename, Param* param) const {
   // Initialize
   param->Reset();
 
-  bifs.read(reinterpret_cast<char *>(&param->mean[0]), param->mean.size() * sizeof(float));
-  bifs.read(reinterpret_cast<char *>(&param->cov[0]), param->cov.size() * sizeof(float));
+  bifs.read(reinterpret_cast<char *>(&param->mean[0]),
+            static_cast<std::streamsize>(param->mean.size() * sizeof(float)));
+  bifs.read(reinterpret_cast<char *>(&param->cov[0]),
+            static_cast<std::streamsize>(param->cov.size() * sizeof(float)));
 
   bifs.close();
 

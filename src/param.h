@@ -41,7 +41,7 @@ namespace arowpp {
 // Model parameters
 struct Param {
   // Number of features
-  unsigned int num_feature;
+  std::size_t num_feature;
 
   // Number of training examples
   std::size_t num_example;
