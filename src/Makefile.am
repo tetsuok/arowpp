@@ -1,6 +1,12 @@
 if GCC
 # These are good warnings to turn on by default
-AM_CXXFLAGS = -Wall -Wwrite-strings -Woverloaded-virtual
+AM_CXXFLAGS = \
+	-Wall \
+	-Wconversion \
+	-Wfloat-equal \
+	-Woverloaded-virtual \
+	-Wparentheses \
+	-Wwrite-strings
 endif
 
 lib_LTLIBRARIES = libarowpp.la

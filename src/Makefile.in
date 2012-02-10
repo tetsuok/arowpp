@@ -261,7 +261,14 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 # These are good warnings to turn on by default
-@GCC_TRUE@AM_CXXFLAGS = -Wall -Wwrite-strings -Woverloaded-virtual
+@GCC_TRUE@AM_CXXFLAGS = \
+@GCC_TRUE@	-Wall \
+@GCC_TRUE@	-Wconversion \
+@GCC_TRUE@	-Wfloat-equal \
+@GCC_TRUE@	-Woverloaded-virtual \
+@GCC_TRUE@	-Wparentheses \
+@GCC_TRUE@	-Wwrite-strings
+
 lib_LTLIBRARIES = libarowpp.la
 libarowpp_la_SOURCES = \
 	classifier.cc \
