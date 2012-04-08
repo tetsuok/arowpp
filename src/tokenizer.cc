@@ -5,8 +5,6 @@ namespace arowpp {
 
 bool Tokenizer::Tokenize(const char* line, fv_t* fv, short* y,
                          std::size_t* maxid) {
-  if (line[0] == '#') return false;
-
   *y = static_cast<short>(atoi(line));
   if (*y != 1 && *y != -1) {
     LOG(ERROR) << "Invalid label. A label must be +1 or -1.";
