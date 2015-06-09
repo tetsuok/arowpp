@@ -53,9 +53,8 @@ bool Features::Open(const char* filename) {
     ++line_num;
     if (line[0] == '#' || line.empty()) continue;
     short label = 0;                      // true label
-    fv_t vec;
-
-    if (!Tokenizer::Tokenize(line.c_str(), &vec, &label, &maxid_)) {
+    const fv_t vec = Tokenizer::Tokenize(line.c_str(), &label, &maxid_);
+    if (!vec.size()) {
       LOG(ERROR) << "Invalid line: " << line_num;
       return false;
     }

@@ -6,11 +6,10 @@ namespace arowpp {
 
 TEST(TokenizerTest, TokenizeTest) {
   const char line[] = "+1 2:1.8 3:0.4 5:2.0 7:2.1";
-  fv_t fv;
   short y = 0;
   size_t dummy = 0;
-
-  EXPECT_TRUE(Tokenizer::Tokenize(line, &fv, &y, &dummy));
+  const fv_t fv = Tokenizer::Tokenize(line, &y, &dummy);
+  EXPECT_TRUE(fv.size() > 0);
   EXPECT_EQ(+1, y);
   EXPECT_EQ(4, fv.size());
 
@@ -25,19 +24,20 @@ TEST(TokenizerTest, TokenizeTest) {
 }
 
 TEST(TokenizerTest, TokenizeFalseTest) {
-  fv_t fv;
   short y = 0;
   size_t dummy = 0;
 
   {
     const char line[] = "# +1 2:1.2 3:1.0";
-    EXPECT_FALSE(Tokenizer::Tokenize(line, &fv, &y, &dummy));
+    const fv_t fv = Tokenizer::Tokenize(line, &y, &dummy);
+    EXPECT_FALSE(fv.size() > 0);
   }
 
   {
     // Invalid label
     const char line[] = "+2 2:1.2 3:1.0";
-    EXPECT_FALSE(Tokenizer::Tokenize(line, &fv, &y, &dummy));
+    const fv_t fv = Tokenizer::Tokenize(line, &y, &dummy);
+    EXPECT_FALSE(fv.size() > 0);
   }
 }
 

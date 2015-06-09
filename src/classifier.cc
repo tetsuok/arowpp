@@ -179,10 +179,10 @@ bool BinaryClassifierImpl::Load(const char *filename) {
 inline bool BinaryClassifierImpl::Classify(const char* line,
                                            Result* result) {
   short label = 0;                      // true label
-  fv_t fv;
   size_t dummy = 0;                     // dummy id
 
-  if (!Tokenizer::Tokenize(line, &fv, &label, &dummy)) {
+  const fv_t fv = Tokenizer::Tokenize(line, &label, &dummy);
+  if (!fv.size()) {
     LOG(ERROR) << "Cannot classify";
     return false;
   }

@@ -39,7 +39,7 @@ namespace arowpp {
 
 class Tokenizer {
  public:
-  static bool Tokenize(const char* line, fv_t* fv, short* y,
+  static fv_t Tokenize(const char* line, short* y,
                        std::size_t* maxid);
 
  private:
