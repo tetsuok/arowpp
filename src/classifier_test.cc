@@ -31,7 +31,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "arowpp.h"
-#include "scoped_ptr.h"
+#include <memory>
 #include <gtest/gtest.h>
 
 namespace arowpp {
@@ -47,7 +47,7 @@ class BinaryClassifierTest : public testing::Test {
     classifier_.reset(BinaryClassifier::instance());
   }
 
-  scoped_ptr<BinaryClassifier> classifier_;
+  std::unique_ptr<BinaryClassifier> classifier_;
 };
 
 TEST_F(BinaryClassifierTest, SetParameterTest) {

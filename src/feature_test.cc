@@ -31,7 +31,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "feature.h"
-#include "scoped_ptr.h"
+#include <memory>
 #include <gtest/gtest.h>
 
 namespace arowpp {
@@ -47,7 +47,7 @@ class FeaturesTest : public testing::Test {
     features_.reset(new Features);
   }
 
-  scoped_ptr<Features> features_;
+  std::unique_ptr<Features> features_;
 };
 
 TEST_F(FeaturesTest, OpenTest) {

@@ -34,7 +34,7 @@
 #include "arowpp.h"
 #include "common.h"
 #include "feature.h"
-#include "scoped_ptr.h"
+#include <memory>
 #include "tokenizer.h"
 #include "param.h"
 #include "model_reader_interface.h"
@@ -115,8 +115,8 @@ class BinaryClassifierImpl : public BinaryClassifier {
   BinaryClassifierImpl(const BinaryClassifierImpl&);
   const BinaryClassifierImpl& operator=(const BinaryClassifierImpl&);
 
-  scoped_ptr<Param> param_;
-  scoped_ptr<Features> features_;       // Feature vector
+  std::unique_ptr<Param> param_;
+  std::unique_ptr<Features> features_;       // Feature vector
   whatlog what_;                        // store error log
 };
 
@@ -150,7 +150,7 @@ bool BinaryClassifierImpl::Save(const char *filename) const {
     return false;
   }
 
-  scoped_ptr<ModelWriterInterface> writer(
+  std::unique_ptr<ModelWriterInterface> writer(
       ModelWriterFactory::GetModelWriter());
 
   if (!writer->Open(filename, param_.get())) {
@@ -167,7 +167,7 @@ bool BinaryClassifierImpl::Save(const char *filename) const {
 }
 
 bool BinaryClassifierImpl::Load(const char *filename) {
-  scoped_ptr<ModelReaderInterface> reader(
+  std::unique_ptr<ModelReaderInterface> reader(
       ModelReaderFactory::GetModelReader());
   Param* param = new Param;
   CHECK_FALSE(reader->Open(filename, param))

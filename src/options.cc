@@ -35,6 +35,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <memory>
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,8 +45,6 @@
 #include <unistd.h>
 #endif
 
-#include "scoped_ptr.h"
-
 namespace arowpp {
 namespace {
 
@@ -54,7 +53,7 @@ Target lexical_cast(Source arg) {
   std::stringstream ss;
   Target ret;
   if (!(ss << arg) || !(ss >> ret) || !(ss >> std::ws).eof()) {
-    scoped_ptr<Target> r(new Target());
+    std::unique_ptr<Target> r(new Target());
     return *r;
   }
   return ret;

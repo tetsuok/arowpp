@@ -38,10 +38,10 @@
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
+#include <memory>
 #include "error_handler.h"
 #include "feature.h"
 #include "options.h"
-#include "scoped_ptr.h"
 #include "timer.h"
 
 #ifdef HAVE_CONFIG_H
@@ -204,7 +204,7 @@ int arow_learn(int argc, char** argv) {
   CHECK_DIE(opts.r > 0.f) << "Error: r must be positive value";
 
   TinyTimer timer;
-  scoped_ptr<arowpp::BinaryClassifier> classifier(arowpp::BinaryClassifier::instance());
+  std::unique_ptr<arowpp::BinaryClassifier> classifier(arowpp::BinaryClassifier::instance());
   classifier->set_num_iter(opts.num_iter);
   classifier->set_r(opts.r);
   classifier->set_shuffle(opts.enable_shuffle);
@@ -227,12 +227,12 @@ int arow_test(int argc, char** argv) {
 
   const char* test_file = argv[1];
   TinyTimer timer;
-  scoped_ptr<arowpp::BinaryClassifier> classifier(arowpp::BinaryClassifier::instance());
+  std::unique_ptr<arowpp::BinaryClassifier> classifier(arowpp::BinaryClassifier::instance());
 
   CHECK_DIE(classifier->Load(argv[2])) << "no such file or directory: "
                                                   << classifier->what();
 
-  scoped_ptr<arowpp::Result> result(arowpp::Result::instance());
+  std::unique_ptr<arowpp::Result> result(arowpp::Result::instance());
   unsigned int line_num = 0;
   std::string line;
   std::ifstream ifs(test_file);

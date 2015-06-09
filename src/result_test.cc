@@ -31,7 +31,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "arowpp.h"
-#include "scoped_ptr.h"
+#include <memory>
 #include <gtest/gtest.h>
 
 namespace arowpp {
@@ -42,7 +42,7 @@ class ResultTest : public testing::Test {
     result_.reset(Result::instance());
   }
 
-  scoped_ptr<Result> result_;
+  std::unique_ptr<Result> result_;
 };
 
 TEST_F(ResultTest, AddTest) {

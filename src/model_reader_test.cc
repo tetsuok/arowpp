@@ -31,9 +31,10 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <gtest/gtest.h>
+
+#include <memory>
 #include "model_reader_interface.h"
 #include "model_writer_interface.h"
-#include "scoped_ptr.h"
 #include "param.h"
 
 namespace arowpp {
@@ -45,7 +46,7 @@ const char kFilename[] = "/tmp/test.model";
 
 TEST(ModelReaderTest, BasicTest) {
   // Setup
-  scoped_ptr<ModelWriterInterface> writer(
+  std::unique_ptr<ModelWriterInterface> writer(
       ModelWriterFactory::GetModelWriter());
   Param param;
   param.num_feature = 2012;
@@ -55,7 +56,7 @@ TEST(ModelReaderTest, BasicTest) {
   param.r = 0.1;
   EXPECT_TRUE(writer->Open(kFilename, &param));
 
-  scoped_ptr<ModelReaderInterface> reader(
+  std::unique_ptr<ModelReaderInterface> reader(
       ModelReaderFactory::GetModelReader());
   Param param2;
   EXPECT_TRUE(reader->Open(kFilename, &param2));
