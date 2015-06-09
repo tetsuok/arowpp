@@ -20,7 +20,7 @@ AM_CONDITIONAL(GCC, test "$GCC" = yes)   # let the Makefile know if we're gcc
 AS_IF([test "x${ac_cv_env_CFLAGS_set}" = "x"],
       [CFLAGS="-O3"])
 AS_IF([test "x${ac_cv_env_CXXFLAGS_set}" = "x"],
-      [CXXFLAGS="-O3"])
+      [CXXFLAGS="-std=c++11 -O3"])
 
 # Checks for libraries.
 
