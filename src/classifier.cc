@@ -94,16 +94,16 @@ class BinaryClassifierImpl : public BinaryClassifier {
 
   double GetMargin(const fv_t& fv) const {
     double res = 0.0;
-    for (fv_t::const_iterator it = fv.begin(); it != fv.end(); ++it) {
-      res += param_->mean[it->first] * it->second;
+    for (const auto& elem : fv) {
+      res += param_->mean[elem.first] * elem.second;
     }
     return res;
   }
 
   double GetConfidence(const fv_t& fv) const {
     double res = 0.0;
-    for (fv_t::const_iterator it = fv.begin(); it != fv.end(); ++it) {
-      res += param_->cov[it->first] * it->second * it->second;
+    for (const auto& elem : fv) {
+      res += param_->cov[elem.first] * elem.second * elem.second;
     }
     return res;
   }
@@ -209,9 +209,9 @@ void BinaryClassifierImpl::Update(const fv_t &fv, short label) {
     ResizeWeight(fv);
 
     // Update mean and covariance
-    for (fv_t::const_iterator it = fv.begin(); it != fv.end(); ++it) {
-      const unsigned int id = it->first;
-      const float val = it->second;
+    for (const auto& elem : fv) {
+      const unsigned int id = elem.first;
+      const float val = elem.second;
       param_->mean[id] += alpha * label * param_->cov[id] * val;
       param_->cov[id] = 1.f / ((1.f / param_->cov[id]) + val * val / static_cast<float>(param_->r));
     }
@@ -219,8 +219,8 @@ void BinaryClassifierImpl::Update(const fv_t &fv, short label) {
 }
 
 void BinaryClassifierImpl::ResizeWeight(const fv_t &fv) {
-  for (std::size_t i = 0; i < fv.size(); ++i) {
-    const std::size_t id = fv[i].first;
+  for (auto f : fv) {
+    const std::size_t id = f.first;
     if (param_->cov.size() > id) continue;
     const std::size_t prev_size = param_->cov.size();
 

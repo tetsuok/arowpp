@@ -59,6 +59,8 @@
 #ifndef AROWPP_SCOPED_PTR_H_
 #define AROWPP_SCOPED_PTR_H_
 
+#include <cstdlib>
+
 namespace arowpp {
 
 template <class T>

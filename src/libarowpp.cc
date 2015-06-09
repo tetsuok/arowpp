@@ -57,7 +57,7 @@ struct arowpp_result_t {
 };
 
 arowpp_classifier_t* arowpp_classifier_new() {
-  arowpp_classifier_t* classifier = new arowpp_classifier_t;
+  auto classifier = new arowpp_classifier_t;
   classifier->ptr = arowpp::BinaryClassifier::instance();
   return classifier;
 }
@@ -144,7 +144,7 @@ const char* arowpp_classifier_error(arowpp_classifier_t* classifier) {
 // Result
 
 arowpp_result_t* arowpp_result_new() {
-  arowpp_result_t* result = new arowpp_result_t;
+  auto result = new arowpp_result_t;
   result->ptr = arowpp::Result::instance();
   return result;
 }

@@ -39,7 +39,7 @@
 namespace arowpp {
 namespace {
 
-ModelReaderInterface* g_model_reader = NULL;
+ModelReaderInterface* g_model_reader = nullptr;
 
 } // namespace
 
@@ -48,7 +48,7 @@ class ModelReader : public ModelReaderInterface {
   ModelReader() {}
   ~ModelReader() {}
 
-  virtual bool Open(const char* filename, Param* param) const;
+  virtual bool Open(const char* filename, Param* param) const override;
 
  private:
   ModelReader(const ModelReader&);
@@ -84,7 +84,7 @@ bool ModelReader::Open(const char* filename, Param* param) const {
 }
 
 ModelReaderInterface* ModelReaderFactory::GetModelReader() {
-  if (g_model_reader == NULL) {
+  if (!g_model_reader) {
     return new ModelReader;
   } else {
     return g_model_reader;

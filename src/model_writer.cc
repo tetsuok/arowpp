@@ -39,7 +39,7 @@
 namespace arowpp {
 namespace {
 
-ModelWriterInterface* g_model_writer = NULL;
+ModelWriterInterface* g_model_writer = nullptr;
 
 } // namespace
 
@@ -48,7 +48,7 @@ class ModelWriter : public ModelWriterInterface {
   ModelWriter() {}
   ~ModelWriter() {}
 
-  virtual bool Open(const char* filename, const Param* param) const;
+  virtual bool Open(const char* filename, const Param* param) const override;
 
  private:
   ModelWriter(const ModelWriter&);
@@ -84,7 +84,7 @@ bool ModelWriter::Open(const char* filename, const Param* param) const {
 }
 
 ModelWriterInterface* ModelWriterFactory::GetModelWriter() {
-  if (g_model_writer == NULL) {
+  if (!g_model_writer) {
     return new ModelWriter;
   } else {
     return g_model_writer;
