@@ -1,6 +1,3 @@
-# This file is a hat tip from WORKSPACE used in Bazel's C++ Basics
-# documentation.
-
 # Copyright 2015 The Bazel Authors. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-new_http_archive(
-    name = "gtest",
-    url = "https://googletest.googlecode.com/files/gtest-1.7.0.zip",
-    sha256 = "247ca18dd83f53deb1328be17e4b1be31514cedfc1e3424f672bf11fd7e0d60d",
-    build_file = "gtest.BUILD",
-    strip_prefix = "gtest-1.7.0",
+cc_library(
+    name = "main",
+    srcs = glob(
+        ["src/*.cc"],
+        exclude = ["src/gtest-all.cc"]
+    ),
+    hdrs = glob([
+        "include/**/*.h",
+        "src/*.h"
+    ]),
+    copts = ["-Iexternal/gtest/include"],
+    linkopts = ["-lpthread"],
+    visibility = ["//visibility:public"],
 )

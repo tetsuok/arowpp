@@ -70,10 +70,10 @@ cc_test(
         "src/result_test.cc",
         "src/tokenizer_test.cc",
     ],
-    copts = COPTS,
+    copts = ["-Iexternal/gtest/include"],
     linkopts = ["-lpthread"],
     deps = [
         ":arowpp",
-        "//external:gtest_main",
+        "@gtest//:main",
     ]
 )
