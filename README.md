@@ -29,6 +29,7 @@ Build Instructions
 We have tested our code on Ubuntu Linux 10.04 (x86_64) and OS X 10.7.3 with the following packaged installed.
 
 - GNU C++ compiler (developed with g++ 4.4.3, Apple's g++ 4.2.1) and Apple's clang 3.0.
+- [Bazel](http://bazel.io/) for building library and binaries.
 - Google C++ Testing Framework (Optional. This requires only for unit tests.)
 
 Note: As it turns out, we decided to use Autotools instead of using
@@ -40,13 +41,9 @@ Installation
 
     $ git clone https://github.com/tetsuok/arowpp.git
     $ cd arowpp
-    $ ./configure [--enable-gtest]
-    $ make
-    $ make check # This is optional. See the note below.
-    $ make install
+    $ bazel build //:arow_learn //:arow_test
 
-Note that If you want to run unit tests with `make check`, please
-remember to use the option `--enable-gtest` when running configure.
+Note that If you want to run unit tests, run `bazel test //:arow_unittest`.
 
 Usage
 -----

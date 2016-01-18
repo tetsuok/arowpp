@@ -2,14 +2,6 @@
 *.o
 *.lo
 *.la
-.deps
-.libs
-autom4te.cache
-autoscan.log
-config.h
-config.log
-config.status
-Makefile
 sample/sample_c
 src/arow_learn
 src/arow_test
@@ -18,4 +10,9 @@ src/feature_test
 src/result_test
 src/tokenizer_test
 src/Makefile
-stamp-h1
+/bazel-bin
+/bazel-genfiles
+/bazel-out
+/bazel-bazel
+/bazel-testlogs
+/bazel-arowpp

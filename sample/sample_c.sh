@@ -1,5 +1,5 @@
 #!/bin/sh
-PROGRAM=./sample_c
+PROGRAM=../bazel-bin/sample/sample_c
 
 if ! [ -x $PROGRAM ]; then
     echo "ERROR: $PROGRAM not found."

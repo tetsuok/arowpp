@@ -1,5 +1,5 @@
 #!/bin/sh -f
-BLD_DIR=../src
+BLD_DIR=../bazel-bin
 TRAINER=$BLD_DIR/arow_learn
 TESTER=$BLD_DIR/arow_test
 
