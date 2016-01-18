@@ -39,7 +39,7 @@ cc_library(
         "gmock-1.7.0/gtest/include",
         "gmock-1.7.0/include",
     ],
-    linkopts = ["-pthread"],
+    linkopts = ["-lpthread"],
     visibility = ["//visibility:public"],
 )
 
