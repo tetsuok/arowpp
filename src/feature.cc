@@ -58,7 +58,7 @@ bool Features::Open(const char* filename) {
       LOG(ERROR) << "Invalid line: " << line_num;
       return false;
     }
-    features_.push_back(std::make_pair(vec, label));
+    features_.emplace_back(vec, label);
   }
   return true;
 }

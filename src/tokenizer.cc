@@ -22,7 +22,7 @@ fv_t Tokenizer::Tokenize(const char* line, short* y,
     float val = static_cast<float>(std::atof(++line));
 
     while (*line != ' ' && *line) line++;
-    fv.push_back(std::make_pair(index, val));
+    fv.emplace_back(index, val);
     if (index > *maxid) *maxid = index;
     if (*line++ == 0) break;
   }
