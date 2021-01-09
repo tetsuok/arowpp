@@ -32,10 +32,6 @@ We have tested our code on Ubuntu Linux 10.04 (x86_64) and OS X 10.7.3 with the 
 - [Bazel](http://bazel.io/) for building library and binaries.
 - Google C++ Testing Framework (Optional. This requires only for unit tests.)
 
-Note: As it turns out, we decided to use Autotools instead of using
-waf since the release of 0.1. The resulting package doesn't depend on
-python anymore.
-
 Installation
 ------------
 
